@@ -1,0 +1,158 @@
+@font-face {
+    font-family: "Quicksand";
+    src: url("fonts/Quicksand-Regular.ttf");
+}
+
+@font-face {
+    font-family: "HoneyScript";
+    src: url("fonts/HoneyScript-Light.ttf");
+}
+
+
+/* body {
+    overflow-x: hidden;
+} */
+
+* {
+    font-family: "Quicksand";
+}
+
+.r1 {
+    background-color: white;
+    border-radius: 30px;
+    box-shadow: 12px 12px 22px;
+}
+
+.login_img {
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.title1 {
+    font-family: "HoneyScript";
+}
+
+.title2 {
+    columns: #000;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+}
+
+.title2:after {
+    position: absolute;
+    content: '';
+    left: 0%;
+    bottom: -4px;
+    height: 2px;
+    width: 120px;
+    background-color: rgb(226, 182, 85);
+}
+
+.label1 {
+    position: absolute;
+    font-size: 12px;
+    color: #fff;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 3px;
+}
+
+.head1 {
+    background-image: url("resourses/home_img/wp.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.inner {
+    overflow: hidden;
+}
+
+.inner img {
+    transition: all 1.5s ease;
+}
+
+.inner:hover img {
+    transform: scale(1.5);
+}
+
+.button1 {
+    border-radius: 5px;
+    background-color: transparent;
+    border: solid 2px rgb(216, 153, 37);
+    padding: 7px;
+    cursor: pointer;
+}
+
+.button1:hover {
+    background-color: rgb(245, 161, 6);
+    box-shadow: 5px 5px 5px;
+}
+
+.button2 {
+    width: 300px;
+    border-radius: 15px;
+    background-color: transparent;
+    border: solid 2px rgb(216, 153, 37);
+    padding: 7px;
+    cursor: pointer;
+}
+
+.button2:hover {
+    background-color: rgb(245, 161, 6);
+    box-shadow: 5px 5px 5px;
+}
+
+.button3 {
+    width: 300px;
+    border-radius: 15px;
+    background-color: transparent;
+    border: solid 2px rgb(216, 153, 37);
+    padding: 7px;
+    cursor: pointer;
+}
+
+.button3:hover {
+    box-shadow: 5px 5px 5px;
+}
+
+.button4 {
+    width: 300px;
+    border-radius: 15px;
+    background-color: transparent;
+    border: solid 2px rgb(20, 108, 225);
+    padding: 7px;
+    cursor: pointer;
+}
+
+.button4:hover {
+    box-shadow: 5px 5px 5px;
+}
+
+.pm1 {
+    height: 64px;
+    background-image: url("resourses/payment_methods/paypal_img.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.pm2 {
+    height: 64px;
+    background-image: url("resourses/payment_methods/visa_img.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.pm3 {
+    height: 64px;
+    background-image: url("resourses/payment_methods/mastercard_img.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.pm4 {
+    height: 64px;
+    background-image: url("resourses/payment_methods/american_express_img.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
