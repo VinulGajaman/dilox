@@ -40,7 +40,7 @@ if (!isset($_SESSION["u"])) {
                 <div class="col-lg-7 text-center mt-4">
                     <div class="row">
                         <div class="col-12 d-lg-block">
-                            <h1 class="animate__animated animate__fadeIn animate__infinite infinite title1" style="font-size: 3.5rem;">WELCOME to Dilox</h1>
+                            <h1 class="animate__animated animate__fadeIn animate__infinite infinite title1" style="font-size: 3.5rem;">WELCOME to Diloxs</h1>
                         </div>
                         <div class="row p-3 pb-5" id="signUpBox">
                             <div class="col-12 g-5">
