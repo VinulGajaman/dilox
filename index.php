@@ -44,7 +44,7 @@ if (!isset($_SESSION["u"])) {
                         </div>
                         <div class="row p-3 pb-5" id="signUpBox">
                             <div class="col-12 g-5">
-                                <h3>Create New Account</h3>
+                                <h3>Create New Accounts</h3>
                             </div>
                             <p id="msg" class="text-danger"></p>
 
