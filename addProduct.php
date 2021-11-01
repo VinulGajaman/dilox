@@ -142,7 +142,7 @@ require "connection.php";
                     <div class="col-12">
                         <hr>
                     </div>
-                    <div class="col-lg-10 col-12 p-3">
+                    <div class="offset-lg-1 col-lg-10 col-12 p-3">
                         <label class="form-label fw-bold fs-5 text-dark">Cost per Item</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text">Rs.</span>

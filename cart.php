@@ -22,7 +22,7 @@ require "connection.php";
     <link rel="icon" href="new/logo2.png" />
     <link rel="stylesheet" href="bootstrap.css" />
     <link rel="stylesheet" href="style.css" />
-    
+
 
 
 </head>
@@ -83,6 +83,7 @@ if (isset($_SESSION["u"])) {
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                 </div>
                 <div class="col-lg-5 col-12" style="background-color: rgb(218, 216, 213);">
@@ -123,34 +124,34 @@ if (isset($_SESSION["u"])) {
             <?php
                     } else {
             ?>
-
-                <div class="col-12">
-                    <div class="row">
-                        <div class="offset-lg-5 col-lg-6 offset-4 col-5"><i class="bi bi-bag-plus" style="font-size: 150px;"></i></div>
-                        <div class="col-12 text-center">
-                            <label class="form-label fs-1 fw-bolder">You Have no Items in Your Cart.</label>
-                        </div>
-                        <div class="offset-2 offset-lg-4 col-10 col-lg-4 d-grid mb-4">
-                            <a href="home.php" class="btn button2 border border-warning border-3 rounded-2 rounded">Start Shopping</a>
-                        </div>
+            </div>
+            <div class="col-12">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12 text-center"><i class="bi bi-bag-plus" style="font-size: 150px;"></i></div>
+                    <div class="col-12 text-center">
+                        <label class="form-label fs-1 fw-bolder">You Have no Items in Your Cart.</label>
+                    </div>
+                    <div class="col-12 text-center mb-4">
+                        <a href="home.php" class="btn button2 border border-warning border-3 rounded-2 rounded">Start Shopping</a>
                     </div>
                 </div>
             </div>
+        </div>
 
-        <?php
+    <?php
                     }
 
-        ?>
+    ?>
 
-        <?php
-        require "footer.php";
-        ?>
-        </div>
-        </div>
+    <?php
+    require "footer.php";
+    ?>
 
-        <script src="script.js"></script>
-        <script src="bootstrap.js"></script>
-        <script src="bootstrap.bundle.js"></script>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="bootstrap.js"></script>
+    <script src="bootstrap.bundle.js"></script>
 
 
     </body>

@@ -392,3 +392,33 @@ function trash(x) {
 
 
 }
+
+
+function changeImg() {
+
+    var image = document.getElementById("imguploader"); //file chooser
+    var view1 = document.getElementById("prev0");
+    var view2 = document.getElementById("prev1"); //image tag
+    var view3 = document.getElementById("prev2");
+
+    image.onchange = function() {
+
+        var file = this.files[0];
+        var url = window.URL.createObjectURL(file);
+
+        view1.src = url;
+
+        var file = this.files[1];
+        var url = window.URL.createObjectURL(file);
+
+        view2.src = url;
+
+        var file = this.files[2];
+        var url = window.URL.createObjectURL(file);
+
+        view3.src = url;
+
+
+    }
+
+}
