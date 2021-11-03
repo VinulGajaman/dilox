@@ -4,6 +4,14 @@ session_start();
 
 require "connection.php";
 
+if (!isset($_GET["c"])) {
+
+    header("location:home.php");
+} else {
+
+    $id = $_GET["c"];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +37,7 @@ require "connection.php";
 </html>
 
 
-<body>
+<body onload="filter(0,<?php echo $id; ?>,1);">
 
     <div class="container-fluid">
         <div class="row">
@@ -41,18 +49,22 @@ require "connection.php";
             <div class="col-12 mb-2">
                 <div class="row">
                     <div class="col-12 text-center">
-                        <p class="title2 animate__animated animate__pulse animate__infinite infinite" style="font-size: 55px;">All Tops</p>
+                        <?php
+                        $category = Database::search("SELECT * FROM `category` WHERE `id`='" . $id . "';");
+                        $cdata = $category->fetch_assoc();
+                        ?>
+                        <p class="title2 animate__animated animate__pulse animate__infinite infinite" style="font-size: 55px;">All <?php echo $cdata["name"]; ?></p>
                     </div>
                 </div>
             </div>
             <div class="col-12 mb-4">
                 <div class="row">
                     <div class="col-lg-6 col-12">
-                        <select class="col-6 form-control fw-bold" id="filter_Select">
+                        <select class="col-6 form-control fw-bold" id="filter" onchange="filter(value,<?php echo $id; ?>,1);">
                             <option class="fw-bold" value="0">Filters</option>
-                            <option class="fw-bold" value="">Sort by Latest</option>
-                            <option class="fw-bold" value="">Sort by price: Low to High</option>
-                            <option class="fw-bold" value="">Sort by price: High to Low</option>
+                            <option class="fw-bold" value="1">Sort by Latest</option>
+                            <option class="fw-bold" value="2">Sort by price: Low to High</option>
+                            <option class="fw-bold" value="3">Sort by price: High to Low</option>
                         </select>
                     </div>
                 </div>
@@ -60,105 +72,8 @@ require "connection.php";
 
             <hr class="border border-warning border-3">
             <div class="col-12 mb-3">
-                <div class="row justify-content-center">
-                    <div class="card col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                        <div class="inner">
-                            <img src="resourses/home_img/12.jpeg" class="card-img-top" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
+                <div class="row justify-content-center" id="loadProduct">
 
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                        </ul>
-                        <div class="card-body">
-                            <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                            <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                            <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="card col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                        <div class="inner">
-                            <img src="resourses/home_img/12.jpeg" class="card-img-top" alt="...">
-                        </div>
-
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                        </ul>
-                        <div class="card-body">
-                            <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                            <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                            <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                        </div>
-                    </div>
-                    <div class="card col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                        <div class="inner">
-                            <img src="resourses/home_img/12.jpeg" class="card-img-top" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                        </ul>
-                        <div class="card-body">
-                            <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                            <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                            <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                        </div>
-                    </div>
-                    <div class="card col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                        <div class="inner">
-                            <img src="resourses/home_img/12.jpeg" class="card-img-top" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                        </ul>
-                        <div class="card-body">
-                            <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                            <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                            <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                        </div>
-                    </div>
-                    <div class="card col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                        <div class="inner">
-                            <img src="resourses/home_img/12.jpeg" class="card-img-top" alt="...">
-                        </div>
-
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">An item</li>
-                            <li class="list-group-item">A second item</li>
-                            <li class="list-group-item">A third item</li>
-                        </ul>
-                        <div class="card-body">
-                            <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                            <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                            <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                        </div>
-                    </div>
                 </div>
             </div>
             <?php
@@ -167,6 +82,26 @@ require "connection.php";
         </div>
     </div>
 
+    <!-- model -->
+    <div class="modal" tabindex="-1" id="alert">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark"><span class="text-warning">Dilox</span> clothing</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Please You Have to Sign In First.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="index();">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- model -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="script.js"></script>
     <script src="bootstrap.js"></script>
     <script src="bootstrap.bundle.js"></script>

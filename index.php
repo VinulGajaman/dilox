@@ -162,10 +162,15 @@ if (!isset($_SESSION["u"])) {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Password Reset</h5>
+                       
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        
                         <div class="row g-3">
+                            <div class="col-12">
+                            <p id="msg3" class="text-danger"></p>
+                            </div>
                             <div class="col-6">
                                 <label class="form-label">New Password</label>
                                 <div class="input-group mb-3">
@@ -181,7 +186,7 @@ if (!isset($_SESSION["u"])) {
                                 </div>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Verification Code</label>
+                                <label class="form-label"> Enter Verification Code Got By Email</label>
                                 <input class="form-control" type="text" id="vc" />
                             </div>
                         </div>

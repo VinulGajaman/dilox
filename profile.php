@@ -91,30 +91,30 @@ require "connection.php";
                         <div class="row p-3 pb-5">
 
                             <div class="row mt-2">
-                                <div class="col-lg-4 col-12">
+                                <div class="col-lg-4 col-12 mt-lg-0 mt-2">
                                     <label class="form-label fw-bold">Fisrt Name</label>
                                     <input type="text" id="fname" class="form-control" placeholder="First Name" value="<?php echo $userdata["fname"]; ?>" />
                                 </div>
-                                <div class="col-lg-4 col-12">
+                                <div class="col-lg-4 col-12 mt-lg-0 mt-2">
                                     <label class="form-label fw-bold">Surname</label>
                                     <input type="text" id="lname" class="form-control" placeholder="Last Name" value="<?php echo $userdata["lname"]; ?>" />
                                 </div>
 
-                                <div class="col-lg-4 col-12">
+                                <div class="col-lg-4 col-12 mt-lg-0 mt-2">
                                     <label class="form-label fw-bold">Mobile Number</label>
                                     <input type="text" id="mobile" class="form-control" placeholder="Enter Phone Number" value="<?php echo $userdata["mobile"]; ?>" />
                                 </div>
                             </div>
-                            <div class="row mt-lg-4 mt-2">
+                            <div class="row mt-lg-4 mt-2 mt-lg-0 mt-2">
                                 <div class="col-lg-4 col-12">
                                     <label class="form-label fw-bold">Password</label>
                                     <input type="text" class="form-control" placeholder="Password" readonly value="<?php echo $_SESSION["u"]["password"]; ?>" />
                                 </div>
-                                <div class="col-lg-4 col-12">
+                                <div class="col-lg-4 col-12 mt-lg-0 mt-2">
                                     <label class="form-label fw-bold">Email Address</label>
                                     <input type="email" id="email" class="form-control" placeholder="Enter email id" value="<?php echo $_SESSION["u"]["email"]; ?>" readonly />
                                 </div>
-                                <div class="col-lg-4 col-12">
+                                <div class="col-lg-4 col-12 mt-lg-0 mt-2">
                                     <label class="form-label fw-bold">Registered Date & Time</label>
                                     <input type="text" class="form-control" placeholder="Registered Date" readonly value="<?php echo $_SESSION["u"]["register_date"]; ?>" />
                                 </div>
@@ -132,11 +132,11 @@ require "connection.php";
 
                             ?>
                                 <div class="row mt-lg-4 mt-2">
-                                    <div class="col-lg-6 col-12">
+                                    <div class="col-lg-6 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">Address Line 01</label>
                                         <input type="text" id="line1" class="form-control" placeholder="Enter Address Line 01" value="<?php echo $d["line1"]; ?>" />
                                     </div>
-                                    <div class="col-lg-6 col-12">
+                                    <div class="col-lg-6 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">Address Line 02</label>
                                         <input type="text" id="line2" class="form-control" placeholder="Enter Address Line 02" value="<?php echo $d["line2"]; ?>" />
                                     </div>
@@ -157,7 +157,7 @@ require "connection.php";
                                     $l = $uprovince->fetch_assoc();
 
                                     ?>
-                                    <div class="col-lg-3 col-12">
+                                    <div class="col-lg-3 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">Province</label>
                                         <select id="province" class="form-select">
                                             <option value="<?php echo $l["id"]; ?>"><?php echo $l["name"]; ?></option>
@@ -180,7 +180,7 @@ require "connection.php";
 
                                         </select>
                                     </div>
-                                    <div class="col-lg-3 col-12">
+                                    <div class="col-lg-3 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">District</label>
                                         <select id="district" class="form-select">
                                             <option value="<?php echo $k["id"]; ?>"><?php echo $k["name"]; ?></option>
@@ -202,11 +202,11 @@ require "connection.php";
                                             ?>
                                         </select>
                                     </div>
-                                    <div class="col-lg-2 col-12">
+                                    <div class="col-lg-2 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">City</label>
                                         <input type="text" id="city" class="form-control" placeholder="City" value="<?php echo $c["name"]; ?>" />
                                     </div>
-                                    <div class="col-lg-2 col-12">
+                                    <div class="col-lg-2 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">Postal Code</label>
                                         <input type="text" id="postalCode" class="form-control" placeholder="Postal Code" value="<?php echo $c["postal_code"]; ?>" />
                                     </div>
@@ -216,16 +216,16 @@ require "connection.php";
                             } else {
 
                                 ?>
-                                    <div class="col-lg-6 col-12">
+                                    <div class="col-lg-6 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">Address Line 01</label>
                                         <input type="text" id="line1" class="form-control" placeholder="Enter Address Line 01" value="" />
                                     </div>
-                                    <div class="col-lg-6 col-12">
+                                    <div class="col-lg-6 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">Address Line 02</label>
                                         <input type="text" id="line2" class="form-control" placeholder="Enter Address Line 02" value="" />
                                     </div>
 
-                                    <div class="col-lg-3 col-12">
+                                    <div class="col-lg-3 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">Province</label>
                                         <select id="province" class="form-control">
                                             <option value="<?php echo $l["id"]; ?>"></option>
@@ -248,7 +248,7 @@ require "connection.php";
 
                                         </select>
                                     </div>
-                                    <div class="col-lg-3 col-12">
+                                    <div class="col-lg-3 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">District</label>
                                         <select id="district" class="form-control">
                                             <option value="<?php echo $k["id"]; ?>"></option>
@@ -270,11 +270,11 @@ require "connection.php";
                                             ?>
                                         </select>
                                     </div>
-                                    <div class="col-lg-2 col-12">
+                                    <div class="col-lg-2 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">City</label>
                                         <input type="text" id="city" class="form-control" placeholder="City" value="" />
                                     </div>
-                                    <div class="col-lg-2 col-12">
+                                    <div class="col-lg-2 col-12 mt-lg-0 mt-2">
                                         <label class="form-label fw-bold">Postal Code</label>
                                         <input type="text" id="postalCode" class="form-control" placeholder="Postal Code" value="" />
                                     </div>
@@ -284,7 +284,7 @@ require "connection.php";
                             }
 
                                 ?>
-                                <div class="col-lg-2 col-12">
+                                <div class="col-lg-2 col-12 mt-lg-0 mt-2">
                                     <label class="form-label fw-bold">Gender</label>
 
                                     <?php

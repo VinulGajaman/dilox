@@ -31,7 +31,7 @@ require "connection.php";
 </html>
 
 
-<body>
+<body onload="selectCategory(1);">
 
     <div class="container-fluid">
         <div class="row">
@@ -101,107 +101,90 @@ require "connection.php";
 
                     <div class="col-12">
                         <div class="row justify-content-center">
-                            <div class="card shadow col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="inner">
-                                    <img src="resourses/home_img/card.jpg" class="card-img-top" alt="...">
-                                </div>
-                                <div class="label1 badge bg-danger">New</div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">An item</li>
-                                    <li class="list-group-item">A second item</li>
-                                    <li class="list-group-item">A third item</li>
-                                </ul>
-                                <div class="card-body">
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                                    <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                                </div>
-                            </div>
+                            <?php
+                            $resultset = Database::search("SELECT DISTINCT product.id AS `pid`,`category_id`,`title`,`price` FROM `product` INNER JOIN `types` ON product.id = types.product_id WHERE `status_id`='1' AND `qty`>'0' ORDER BY `datetime_added` DESC LIMIT 5 OFFSET 0 ;");
+                            $nr = $resultset->num_rows;
 
-                            <div class="card shadow col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="inner">
-                                    <img src="resourses/home_img/card.jpg" class="card-img-top" alt="...">
+                            for ($y = 0; $y < $nr; $y++) {
+                                $prod = $resultset->fetch_assoc();
+
+                                $img = Database::search("SELECT* FROM `images` WHERE `product_id`='" . $prod["pid"] . "';");
+                                $imgd = $img->fetch_assoc();
+                            ?>
+                                <div class="card shadow col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
+                                    <div class="inner" style="height:400px;">
+                                        <img src="<?php echo $imgd["code"]; ?>" class="card-img-top" alt="..." style="object-fit:cover; height: 400px">
+                                    </div>
+                                    <div class="label1 badge bg-danger">New</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title fw-bold" style="font-size: 18px;"><?php echo $prod["title"]; ?></h5>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                                <?php
+
+                                                $type = Database::search("SELECT DISTINCT `color` FROM `types` WHERE `product_id`='" . $prod["pid"] . "';");
+                                                $typenum = $type->num_rows;
+
+                                                for ($i = 0; $i < $typenum; $i++) {
+                                                    $typedata = $type->fetch_assoc();
+                                                ?>
+
+
+                                                    <label class="btn btn-outline-dark btn-sm" for="Pcolors<?php echo $i; ?>"><?php echo $typedata["color"]; ?></label>
+                                                <?php
+                                                }
+                                                ?>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item"> <?php
+
+                                                                        $size = Database::search("SELECT DISTINCT `size` FROM `types` WHERE `product_id`='" . $prod["pid"] . "';");
+                                                                        $sizenum = $type->num_rows;
+
+                                                                        while ($sizedata = $size->fetch_assoc()) {
+
+                                                                        ?>
+
+                                                <button class="btn btn-outline-secondary btn-sm text-dark"><?php echo $sizedata["size"]; ?></button>
+                                            <?php
+                                                                        }
+                                            ?>
+                                        </li>
+                                        <li class="list-group-item text-danger fw-bold">Rs. <?php echo $prod["price"]; ?> .00</li>
+                                    </ul>
+                                    <div class="card-body">
+                                        <a href="singleProductView.php?id=<?php echo $prod["pid"]; ?>" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
+                                        <?php
+                                        if (isset($_SESSION["u"])) {
+                                        ?>
+                                            <?php
+                                            $watchlist = Database::search("SELECT * FROM `watchlist` WHERE `product_id`='" . $prod["pid"] . "';");
+                                            $watchnum = $watchlist->num_rows;
+                                            if ($watchnum == 1) {
+                                                $heart = "bi-heart-fill";
+                                            } else {
+                                                $heart = "bi-heart";
+                                            }
+                                            ?>
+                                            <a class="btn btn-outline-danger" onclick="addToWatchlist(<?php echo $prod['pid']; ?>);"><i class="hart<?php echo $prod["pid"]; ?> bi <?php echo  $heart; ?>"></i></a>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <a class="btn btn-outline-danger" onclick="model();"><i class="bi bi-heart"></i></a>
+                                        <?php
+                                        }
+                                        ?>
+
+                                    </div>
                                 </div>
-                                <div class="label1 badge bg-danger">New</div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">An item</li>
-                                    <li class="list-group-item">A second item</li>
-                                    <li class="list-group-item">A third item</li>
-                                </ul>
-                                <div class="card-body">
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                                    <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                                </div>
-                            </div>
-                            <div class="card shadow col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="inner">
-                                    <img src="resourses/home_img/card3.jpg" class="card-img-top" alt="...">
-                                </div>
-                                <div class="label1 badge bg-danger">New</div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">An item</li>
-                                    <li class="list-group-item">A second item</li>
-                                    <li class="list-group-item">A third item</li>
-                                </ul>
-                                <div class="card-body">
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                                    <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                                </div>
-                            </div>
-                            <div class="card shadow col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="inner">
-                                    <img src="resourses/home_img/card2.jpg" class="card-img-top" alt="...">
-                                </div>
-                                <div class="label1 badge bg-danger">New</div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">An item</li>
-                                    <li class="list-group-item">A second item</li>
-                                    <li class="list-group-item">A third item</li>
-                                </ul>
-                                <div class="card-body">
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                                    <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                                </div>
-                            </div>
-                            <div class="card shadow col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="inner">
-                                    <img src="resourses/home_img/card.jpg" class="card-img-top" alt="...">
-                                </div>
-                                <div class="label1 badge bg-danger">New</div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">An item</li>
-                                    <li class="list-group-item">A second item</li>
-                                    <li class="list-group-item">A third item</li>
-                                </ul>
-                                <div class="card-body">
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                                    <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                                </div>
-                            </div>
+                            <?php
+                            }
+                            ?>
+
+
+
                         </div>
                     </div>
                 </div>
@@ -222,12 +205,15 @@ require "connection.php";
                                     $rs = Database::search("SELECT * FROM `category`;");
                                     $n = $rs->num_rows;
 
+
                                     for ($i = 0; $i < $n; $i++) {
 
                                         $category = $rs->fetch_assoc();
                                     ?>
-                                        <input type="radio" class="btn-check" name="btnradio" id="btnradio<?php echo $i; ?>" autocomplete="off" id="category<?php echo $category["id"]; ?>" <?php if($i==0){ echo "checked"; }?> >
-                                        <label class="btn btn-outline-dark" for="btnradio<?php echo $i; ?>"><?php echo $category["name"]; ?></label>
+                                        <input type="radio" class="btn-check" name="categoryP" id="categoryP<?php echo $i; ?>" autocomplete="off" id="category<?php echo $category["id"]; ?>" <?php if ($i == 0) {
+                                                                                                                                                                                                    echo "checked";
+                                                                                                                                                                                                } ?>>
+                                        <label onclick="selectCategory(<?php echo $category['id']; ?>); " class="btn btn-outline-dark" for="categoryP<?php echo $i; ?>"><?php echo $category["name"]; ?></label>
                                     <?php
                                     }
 
@@ -237,54 +223,8 @@ require "connection.php";
                         </div>
                     </div>
                     <div class="col-12 mt-3">
-                        <div class="row justify-content-center">
-                            <div class="card shadow col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="inner">
-                                    <img src="resourses/product/1.JPEG" class="card-img-top" />
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                                    <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                                </div>
-                            </div>
-                            <div class="card shadow col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="inner">
-                                    <img src="resourses/product/2.JPEG" class="card-img-top" />
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                                    <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                                </div>
-                            </div>
-                            <div class="card shadow col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="inner">
-                                    <img src="resourses/product/3.JPEG" class="card-img-top" />
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                                    <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                                </div>
-                            </div>
-                            <div class="card shadow col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="inner">
-                                    <img src="resourses/product/4.JPEG" class="card-img-top" />
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="btn btn-outline-secondary"><i class="bi bi-basket2-fill"></i></a>
-                                    <a href="#" class="btn btn-outline-danger "><i class="bi bi-heart-fill"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-3 col-lg-2 offset-9">
-                                <a href="seeCategory.php" class="btn btn-outline-dark" style="font-size: 15px;">See All...</i></a>
-                            </div>
+                        <div class="row justify-content-center" id="load">
+
                         </div>
                     </div>
                 </div>
@@ -323,10 +263,31 @@ require "connection.php";
         </div>
     </div>
 
+    <!-- model -->
+    <div class="modal" tabindex="-1" id="alert">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark"><span class="text-warning">Dilox</span> clothing</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Please You Have to Sign In First.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="index();">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <script src="script.js"></script>
+    <!-- model -->
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="bootstrap.js"></script>
     <script src="bootstrap.bundle.js"></script>
+    <script src="script.js"></script>
+
 </body>
 
 </html>

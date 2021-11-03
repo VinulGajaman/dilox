@@ -33,7 +33,7 @@ if (isset($_SESSION["u"])) {
     $uemail = $_SESSION["u"]["email"];
 ?>
 
-    <body>
+    <body onload="watchlistSearch(1);">
         <div class="container-fluid">
             <div class="row">
                 <?php
@@ -73,79 +73,14 @@ if (isset($_SESSION["u"])) {
                 ?>
                     <div class="col-12 offset-lg-4 col-lg-4 mb-3 mb-lg-0">
                         <div class="input-group rounded-2 rounded">
-                            <input type="text" class="form-control border-secondary border" id="basic_Search_txt" placeholder="Search in Watchlist..." />
-                            <button class="btn btn-outline-dark col-3 fw-bold">Search</button>
+                            <input type="text" class="form-control border-secondary border" id="search" placeholder="Search in Watchlist..." onkeyup="watchlistSearch(1);"/>
+                            <!-- <button class="btn btn-outline-dark col-3 fw-bold" onclick="">Search</button> -->
                         </div>
                     </div>
 
                     <div class="col-12 mb-3 mt-3">
-                        <div class="row justify-content-center">
-                            <div class="card col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="card-body">
-                                    <a href="#"> <i class="bi bi-x-lg text-dark"></i></a>
-                                </div>
-                                <div class="inner">
-                                    <img src="resourses/home_img/12.jpeg" class="card-img-top" alt="...">
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-
-                                    <li class="list-group-item">A second item</li>
-                                    <li class="list-group-item">A third item</li>
-                                </ul>
-                                <div class="card-body">
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="offset-7 btn btn-outline-secondary text-dark"><i class="bi bi-basket2-fill"></i></a>
-
-                                </div>
-                            </div>
-                            <div class="card col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="card-body">
-                                    <a href="#"> <i class="bi bi-x-lg text-dark"></i></a>
-                                </div>
-                                <div class="inner">
-                                    <img src="resourses/home_img/12.jpeg" class="card-img-top" alt="...">
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-
-                                    <li class="list-group-item">A second item</li>
-                                    <li class="list-group-item">A third item</li>
-                                </ul>
-                                <div class="card-body">
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="offset-7 btn btn-outline-secondary text-dark"><i class="bi bi-basket2-fill"></i></a>
-
-                                </div>
-                            </div>
-                            <div class="card col-6 col-lg-3 mt-1 mb-1 ms-1" style="width: 18rem;">
-                                <div class="card-body">
-                                    <a href="#"> <i class="bi bi-x-lg text-dark"></i></a>
-                                </div>
-                                <div class="inner">
-                                    <img src="resourses/home_img/12.jpeg" class="card-img-top" alt="...">
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-
-                                    <li class="list-group-item">A second item</li>
-                                    <li class="list-group-item">A third item</li>
-                                </ul>
-                                <div class="card-body">
-                                    <a href="#" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                    <a href="#" class="offset-7 btn btn-outline-secondary text-dark"><i class="bi bi-basket2-fill"></i></a>
-
-                                </div>
-                            </div>
+                        <div class="row justify-content-center" id="load" >
+                            
                         </div>
                     </div>
                 <?php

@@ -113,7 +113,6 @@ function forgotPassword() {
 
             if (text == 1) {
 
-                alert("Verfication email sent.Please check your inbox.");
 
                 var m = document.getElementById("forgetPasswordModel");
                 bm = new bootstrap.Modal(m);
@@ -185,14 +184,14 @@ function resetPassword() {
         if (r.readyState == 4) {
 
             var text = r.responseText;
-            if (text == 1) {
-                alert("Password Reset Success");
-
+            if (text == "Password Reset Success") {
 
                 bm.hide();
 
             } else {
-                alert("Password Reset Fail");
+                var msg3 = document.getElementById("msg3");
+                msg3.innerHTML = text;
+
             }
         }
 
@@ -381,17 +380,17 @@ function verify() {
 
 
 function addRow() {
-    $('#table1 > tbody:last').append('<tr><td><select class="form-select"> <option value ="S"> S </option> <option value = "M" > M </option> <option value = "L" > L </option> </select></td><td><input class = "form-control"type = "text"/></td><td><input class = "form-control"type = "text"/></td><td class = "fs-5"><button id="trash" onclick="trash(this);" class = "btn btn-outline-dark"> <i class = "bi bi-trash"> </i></button></td></tr>')
+    $('#table1 > tbody:last').append('<tr><td><select name="size[]" class="form-select"> <option value ="S"> S </option> <option value = "M" > M </option> <option value = "L" > L </option> </select></td><td><input class = "form-control"type = "text" name="color[]" required/></td><td><input  class = "form-control"type = "number" name="qty[]" required/></td><td class = "fs-5"><button onclick="m(this);"  id="trash" type="button" class = "btn btn-outline-dark"> <i class = "bi bi-trash"> </i></button></td></tr>')
 
 }
 
-function trash(x) {
-
-
+function m(x) {
     $(x).closest('tr').remove();
 
-
 }
+
+
+
 
 
 function changeImg() {
@@ -421,4 +420,291 @@ function changeImg() {
 
     }
 
+}
+
+function blockUser(email) {
+
+    var mail = email;
+
+    var blockbtn = document.getElementById("blockbtn" + mail);
+
+    var f = new FormData();
+    f.append("e", mail);
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+
+            var text = r.responseText;
+
+            if (text == "unblock") {
+                // window.location = "manageUsers.php";
+                blockbtn.className = "btn btn-success";
+                blockbtn.innerHTML = "Unblock";
+            } else if (text == "block") {
+                blockbtn.className = "btn btn-danger";
+                blockbtn.innerHTML = "Block";
+            }
+        }
+
+    }
+
+    r.open("POST", "userBlockProcess.php", true);
+    r.send(f);
+
+}
+
+function model() {
+    var dm = document.getElementById("alert");
+    var k = new bootstrap.Modal(dm);
+    k.show();
+}
+
+function admin() {
+    window.location = "adminSignin.php";
+}
+
+function selectCategory(x) {
+
+    var cid = x;
+
+    var load = document.getElementById("load");
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+
+            var text = r.responseText;
+
+            load.innerHTML = text;
+        }
+
+    }
+
+    r.open("GET", "categoryLoad.php?c=" + cid, true);
+    r.send();
+
+}
+
+function filter(x, id, page) {
+
+    var f = x;
+    var c = id;
+    var page = page;
+
+    var load = document.getElementById("loadProduct");
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+
+            var text = r.responseText;
+
+            load.innerHTML = text;
+        }
+
+    }
+
+    r.open("GET", "filterProcess.php?f=" + f + "&c=" + c + "&p=" + page, true);
+    r.send();
+}
+
+function collection(page) {
+
+    var page = page;
+
+    var f = document.getElementById("filter1").value;
+    var s = document.getElementById("search").value;
+    var c = document.getElementById("select").value;
+
+    var form = new FormData();
+
+    form.append("f", f);
+    form.append("s", s);
+    form.append("c", c);
+    form.append("p", page);
+
+    var load = document.getElementById("loadProduct");
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+
+            var text = r.responseText;
+
+            load.innerHTML = text;
+        }
+
+    }
+
+    r.open("POST", "collectionProcess.php", true);
+    r.send(form);
+}
+
+// addToWatchlist
+
+function addToWatchlist(id) {
+
+    var pid = id;
+    var msg = document.getElementById("alert" + pid);
+
+    var r = new XMLHttpRequest();
+    r.onreadystatechange = function() {
+        if (r.readyState == 4) {
+
+
+            $('.hart' + pid).toggleClass('bi-heart-fill');
+            $('.hart' + pid).toggleClass('bi-heart');
+
+            // document.getElementsByClassName('hart' + pid).classList.toggle('bi-heart-fill');
+            // document.getElementsByClassName('hart' + pid).classList.toggle('bi-heart');
+            var text = r.responseText;
+
+        }
+
+    };
+
+    r.open("GET", "addToWatchlistProcess.php?id=" + pid, true);
+    r.send();
+}
+
+function watchlistSearch(x) {
+    var page = x;
+    var txt = document.getElementById("search").value;
+
+    var f = new FormData();
+    f.append("t", txt);
+    f.append("p", page);
+
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+
+            var text = r.responseText;
+
+            var load = document.getElementById("load");
+
+            load.innerHTML = text;
+        }
+
+    };
+
+    r.open("POST", "watchlistSearch.php", true);
+    r.send(f);
+}
+
+//block product
+
+function blockProduct(id) {
+    var id = id;
+    var blockbtn = document.getElementById("blockbtn" + id);
+
+    var f = new FormData();
+    f.append("id", id);
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+        if (r.readyState == 4) {
+            var t = r.responseText;
+            if (t == "success1") {
+
+                blockbtn.className = "btn btn-success";
+                blockbtn.innerHTML = "Unblock"
+
+            } else if (t == "success2") {
+
+                blockbtn.className = "btn btn-danger";
+                blockbtn.innerHTML = "Block"
+
+            }
+        }
+    }
+
+    r.open("POST", "productBlockProcess.php", true);
+    r.send(f);
+}
+
+function deleteFromWatchlist(id) {
+    var wid = id;
+
+    var r = new XMLHttpRequest();
+    r.onreadystatechange = function() {
+        if (r.readyState == 4) {
+            var text = r.responseText;
+
+            watchlistSearch(1);
+        }
+    };
+
+    r.open("GET", "removeWatchlistProcess.php?id=" + wid, true);
+    r.send();
+}
+
+/////print//////
+
+function printDiv() {
+    var restorepage = document.body.innerHTML;
+    var page = document.getElementById("GFG").innerHTML;
+    document.body.innerHTML = page;
+    window.print();
+    document.body.innerHTML = restorepage;
+}
+
+/////print//////
+
+//////// singleProduct//////////
+
+function loadSize(c, id) {
+
+    var clr = c;
+    var id = id;
+
+    var form = new FormData();
+
+    form.append("c", clr);
+    form.append("id", id);
+
+    var r = new XMLHttpRequest();
+    r.onreadystatechange = function() {
+        if (r.readyState == 4) {
+            var text = r.responseText;
+
+            var sizeLoad = document.getElementById("sizeLoad");
+            sizeLoad.innerHTML = text;
+            changeQty();
+
+        }
+    };
+
+    r.open("POST", "SingleProductProcess.php", true);
+    r.send(form);
+
+}
+
+
+function changeQty() {
+
+    var element = $('#sizeSelect').find('option:selected');
+    var av = element.attr("qty");
+    document.getElementById("pqty").max = av;
+    $('#changeStock').text(av);
+
+}
+
+///add to cart
+
+function addToCart() {
+    alert("ok");
 }
