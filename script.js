@@ -705,6 +705,187 @@ function changeQty() {
 
 ///add to cart
 
-function addToCart() {
-    alert("ok");
+$("#cartForm").submit(function(e) {
+    e.preventDefault();
+    var color = $('input[name="radioCart"]:checked').val();
+    var size = document.getElementById("sizeSelect").value;
+    var qty = document.getElementById("pqty").value;
+    var pid = document.getElementById("cartProduct").value;
+
+    var form = new FormData();
+
+    form.append("c", color);
+    form.append("s", size);
+    form.append("q", qty);
+    form.append("p", pid);
+
+    var r = new XMLHttpRequest();
+    r.onreadystatechange = function() {
+        if (r.readyState == 4) {
+            var text = r.responseText;
+
+            var dm = document.getElementById("success");
+            var k = new bootstrap.Modal(dm);
+            k.show();
+
+        }
+    };
+
+    r.open("POST", "addToCartProcess.php", true);
+    r.send(form);
+});
+
+
+function deleteModelPop(x) {
+
+
+    var dm = document.getElementById("deleteCart" + x);
+    var k = new bootstrap.Modal(dm);
+    k.show();
+
+}
+
+function deleteFromCart(id, x) {
+
+    var cid = id;
+
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+            var text = r.responseText;
+
+            if (text == "success") {
+                var dm = document.getElementById("deleteCart" + x);
+                var k = new bootstrap.Modal(dm);
+                k.hide();
+                window.location = "cart.php";
+
+
+            }
+
+        }
+    };
+
+    r.open("GET", "deleteFromCartProcess.php?id=" + cid, true);
+    r.send();
+
+}
+
+function payNow() {
+
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+            var text = r.responseText;
+            var obj = JSON.parse(text);
+
+            var mail = obj["email"];
+            var amount = obj["amount"];
+            var orderId = obj["id"];
+            var delivery = obj["delivery_fee"];
+
+            if (text == 1) {
+                alert("Please Sign In First.");
+                window.location = "index.php";
+
+            } else if (text == 2) {
+                alert("Please Update Your Profile First");
+                window.location = "userProfile.php";
+            } else {
+
+                // Called when user completed the payment. It can be a successful payment or failure
+                payhere.onCompleted = function onCompleted(orderId) {
+                    console.log("Payment completed. OrderID:" + orderId);
+
+                    saveInvoice(orderId, amount, delivery);
+
+                    //Note: validate the payment and show success or failure page to the customer
+                };
+
+                // Called when user closes the payment without completing
+                payhere.onDismissed = function onDismissed() {
+                    //Note: Prompt user to pay again or show an error page
+                    console.log("Payment dismissed");
+                };
+
+                // Called when error happens when initializing payment such as invalid parameters
+                payhere.onError = function onError(error) {
+                    // Note: show an error page
+                    console.log("Error:" + error);
+                };
+
+                // Put the payment variables here
+                var payment = {
+                    "sandbox": true,
+                    "merchant_id": "1217969", // Replace your Merchant ID
+                    "return_url": "http://localhost/dilox/home.php", // Important
+                    "cancel_url": "http://localhost/dilox/home.php", // Important
+                    "notify_url": "http://sample.com/notify",
+                    "order_id": obj["id"],
+                    "items": obj["item"],
+                    "amount": amount + ".00",
+                    "currency": "LKR",
+                    "first_name": obj["fname"],
+                    "last_name": obj["lname"],
+                    "email": mail,
+                    "phone": obj["mobile"],
+                    "address": obj["address"],
+                    "city": obj["city"],
+                    "country": "Sri Lanka",
+                    "delivery_address": "No. 46, Galle road, Kalutara South",
+                    "delivery_city": "Kalutara",
+                    "delivery_country": "Sri Lanka",
+                    "custom_1": "",
+                    "custom_2": ""
+                };
+
+                // Show the payhere.js popup, when "PayHere Pay" is clicked
+
+                payhere.startPayment(payment);
+
+            }
+        }
+
+    };
+
+    r.open("GET", "buyNowProcess.php?id=1", true);
+    r.send();
+}
+
+function saveInvoice(id, amount, d) {
+
+    var id = id;
+    var a = amount;
+    var d = d;
+
+    var f = new FormData();
+
+    f.append("id", id);
+    f.append("d", d);
+    f.append("a", a);
+
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+            var text = r.responseText;
+
+
+            if (text == "Payment Success") {
+
+                window.location = "invoice.php?id=" + id;
+            }
+        }
+    };
+
+    r.open("POST", "saveInvoice.php", true);
+    r.send(f);
 }

@@ -1,36 +1,51 @@
 <?php
 
+session_start();
+
 require "connection.php";
 
 $txt = $_POST["t"];
 $pageno = $_POST["p"];
+$uemail = $_SESSION["u"]["email"];
 
 $results_per_page = 4;
 
 if (!isset($txt)) {
 
-    $product = Database::search("SELECT * FROM `watchlist` INNER JOIN `product` ON watchlist.product_id = product.id;");
+    $product = Database::search("SELECT * FROM `watchlist` INNER JOIN `product` ON watchlist.product_id = product.id WHERE `user_email`='" . $uemail . "' ;");
     $d = $product->num_rows;
     $row =  $product->fetch_assoc();
     $result_per_page = 4;
     $number_of_pages = ceil($d / $result_per_page);
     $page_first_result = ((int)$pageno - 1) * $result_per_page;
-    $textSearch = Database::search("SELECT * FROM `watchlist` INNER JOIN `product` ON watchlist.product_id = product.id  LIMIT " . $result_per_page . " OFFSET " . $page_first_result . " ");
+    $textSearch = Database::search("SELECT * FROM `watchlist` INNER JOIN `product` ON watchlist.product_id = product.id WHERE `user_email`='" . $uemail . "' LIMIT " . $result_per_page . " OFFSET " . $page_first_result . " ");
     $n = $textSearch->num_rows;
 } else {
-    $product = Database::search("SELECT * FROM `watchlist` INNER JOIN `product` ON watchlist.product_id = product.id WHERE `title` LIKE '%" . $txt . "%' ;");
+    $product = Database::search("SELECT * FROM `watchlist` INNER JOIN `product` ON watchlist.product_id = product.id WHERE `user_email`='" . $uemail . "' AND `title` LIKE '%" . $txt . "%' ;");
     $d = $product->num_rows;
     $row =  $product->fetch_assoc();
     $result_per_page = 4;
     $number_of_pages = ceil($d / $result_per_page);
     $page_first_result = ((int)$pageno - 1) * $result_per_page;
-    $textSearch = Database::search("SELECT * FROM `watchlist` INNER JOIN `product` ON watchlist.product_id = product.id WHERE `title` LIKE '%" . $txt . "%' LIMIT " . $result_per_page . " OFFSET " . $page_first_result . " ");
+    $textSearch = Database::search("SELECT * FROM `watchlist` INNER JOIN `product` ON watchlist.product_id = product.id WHERE `user_email`='" . $uemail . "' AND `title` LIKE '%" . $txt . "%' LIMIT " . $result_per_page . " OFFSET " . $page_first_result . " ");
     $n = $textSearch->num_rows;
 }
 
+if (empty($txt) && $n <= 0) {
+?>
 
+    <!-- without items -->
 
-if ($n <= 0) {
+    <div class="col-12 offset-lg-1 col-lg-9 mt-3">
+        <div class="row text-center">
+            <div class="col-12"><i class="bi bi-bookmark-plus" style="font-size: 150px;"></i></div>
+            <lable class="form-lable fs-1 mb-3 fw-bolder">You have no items in your watchlist</lable>
+        </div>
+    </div>
+
+    <!-- without items -->
+<?php
+}else if ($n <= 0) {
 ?>
     <div class="col-12 text-center">
         <label class="form-label fs-1 fw-bolder">No Matched Items.</label>

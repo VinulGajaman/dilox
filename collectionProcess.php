@@ -21,38 +21,38 @@ if ($cid != "0") {
 }
 
 if ($f == "0") {
-    $category = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `title` LIKE '%" . $search . "%';");
+    $category = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `status_id`='1' AND `title` LIKE '%" . $search . "%';");
 
     $d = $category->num_rows;
     $results_per_page = 5;
     $number_of_pages = ceil($d / $results_per_page);
     $offset = ((int)$pageno - 1) * $results_per_page;
-    $selectedproducts = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `title` LIKE '%" . $search . "%' LIMIT $results_per_page OFFSET $offset");
+    $selectedproducts = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `status_id`='1' AND `title` LIKE '%" . $search . "%' LIMIT $results_per_page OFFSET $offset");
     $spn = $selectedproducts->num_rows;
 } else if ($f == "1") {
 
-    $category = Database::search("SELECT * FROM `product` WHERE " . $category_id . "`title` LIKE '%" . $search . "%' ORDER BY `datetime_added` DESC;");
+    $category = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `status_id`='1' AND `title` LIKE '%" . $search . "%' ORDER BY `datetime_added` DESC;");
     $d = $category->num_rows;
     $results_per_page = 5;
     $number_of_pages = ceil($d / $results_per_page);
     $offset = ((int)$pageno - 1) * $results_per_page;
-    $selectedproducts = Database::search("SELECT * FROM `product` WHERE " . $category_id . "`title` LIKE '%" . $search . "%' ORDER BY `datetime_added` DESC LIMIT $results_per_page OFFSET $offset");
+    $selectedproducts = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `status_id`='1' AND `title` LIKE '%" . $search . "%' ORDER BY `datetime_added` DESC LIMIT $results_per_page OFFSET $offset");
     $spn = $selectedproducts->num_rows;
 } else if ($f == "2") {
-    $category = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `title` LIKE '%" . $search . "%' ORDER BY `price` ASC;");
+    $category = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `status_id`='1' AND `title` LIKE '%" . $search . "%' ORDER BY `price` ASC;");
     $d = $category->num_rows;
     $results_per_page = 5;
     $number_of_pages = ceil($d / $results_per_page);
     $offset = ((int)$pageno - 1) * $results_per_page;
-    $selectedproducts = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `title` LIKE '%" . $search . "%' ORDER BY `price` ASC LIMIT $results_per_page OFFSET $offset");
+    $selectedproducts = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `status_id`='1' AND `title` LIKE '%" . $search . "%' ORDER BY `price` ASC LIMIT $results_per_page OFFSET $offset");
     $spn = $selectedproducts->num_rows;
 } else if ($f == "3") {
-    $category = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `title` LIKE '%" . $search . "%' ORDER BY `price` DESC;");
+    $category = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `status_id`='1' AND `title` LIKE '%" . $search . "%' ORDER BY `price` DESC;");
     $d = $category->num_rows;
     $results_per_page = 5;
     $number_of_pages = ceil($d / $results_per_page);
     $offset = ((int)$pageno - 1) * $results_per_page;
-    $selectedproducts = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `title` LIKE '%" . $search . "%' ORDER BY `price` DESC LIMIT $results_per_page OFFSET $offset");
+    $selectedproducts = Database::search("SELECT * FROM `product` WHERE " . $category_id . " `status_id`='1' AND `title` LIKE '%" . $search . "%' ORDER BY `price` DESC LIMIT $results_per_page OFFSET $offset");
     $spn = $selectedproducts->num_rows;
 }
 

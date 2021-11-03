@@ -123,7 +123,8 @@ require "connection.php";
                             <p class="title2" style="font-size:20px;"><?php echo $pd["title"]; ?></p>
                         </div>
                         <hr class="border border-warning border-1">
-                        <form onsubmit="addToCart();">
+
+                        <form id="cartForm">
 
                             <div class="col-12 mt-2">
                                 <label class="form-label fs-5">Price :</label> &nbsp;
@@ -140,12 +141,12 @@ require "connection.php";
                                         $typedata = $type->fetch_assoc();
                                     ?>
 
-                                        <input type="radio" class="btn-check" name="btnradio" id="btnradio<?php echo $i; ?>" autocomplete="off" onclick="loadSize('<?php echo $typedata['color']; ?>',<?php echo $pid; ?>);" required>
+                                        <input type="radio" class="btn-check" value="<?php echo $typedata["color"]; ?>" name="radioCart" id="btnradio<?php echo $i; ?>" autocomplete="off" onclick="loadSize('<?php echo $typedata['color']; ?>',<?php echo $pid; ?>);" required>
                                         <label class="btn btn-outline-dark" for="btnradio<?php echo $i; ?>"><?php echo $typedata["color"]; ?></label>
                                     <?php
                                     }
                                     ?>
-
+                                    <input type="hidden" value="<?php echo $pid; ?>" id="cartProduct">
                                 </div>
                             </div>
                             <!-- ////////////////////////// -->
@@ -180,7 +181,18 @@ require "connection.php";
                                     <input type="number" min="1" max="" id="pqty" class="form-control" placeholder="Qty" required />
                                 </div>
                                 <div class="col-5 mb-3 d-grid">
-                                    <button type="sumbit" class="button1 fw-bold">Add to Cart</button>
+                                    <?php
+                                    if (isset($_SESSION["u"])) {
+                                    ?>
+                                        <button type="sumbit" class="button1 fw-bold">Add to Cart</button>
+                                    <?php
+                                    }else{
+                                        ?>
+                                        <button class="button1 fw-bold" onclick="model();">Add to Cart</button>
+                                    <?php
+                                    }
+                                    ?>
+
                                 </div>
 
                                 <div class="col-3 mb-3">
@@ -373,6 +385,26 @@ require "connection.php";
 
         <!-- model -->
         </div>
+
+
+        <!--Add to Cart model -->
+        <div class="modal" tabindex="-1" id="success">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-dark"><span class="text-warning">Dilox</span> clothing</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Product Added to the Cart.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- model -->
 
 
         <script src="script.js"></script>

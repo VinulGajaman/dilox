@@ -4,7 +4,9 @@ session_start();
 
 require "connection.php";
 
-
+$total = "0";
+$subtotal = "0";
+$shipping = "0";
 
 ?>
 
@@ -22,7 +24,7 @@ require "connection.php";
     <link rel="icon" href="new/logo2.png" />
     <link rel="stylesheet" href="bootstrap.css" />
     <link rel="stylesheet" href="style.css" />
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
 </head>
@@ -57,36 +59,86 @@ if (isset($_SESSION["u"])) {
                     ?>
                         <div class="row mt-3">
                             <div class="offset-lg-1 col-lg-10 col-12">
-                                <div class="card shadow mb-3" style="max-width: 700px;">
-                                    <div class="row g-0">
-                                        <div class="col-md-3 d-block d-md-none d-lg-none">
-                                            <div class="card-body bg-dark opacity-50">
-                                                <a href="#"> <i class="bi bi-x-lg text-light" style="padding-left: 400px;"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <img src="resourses/product/1.JPEG" class="img-fluid rounded-start" />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="card-body">
-                                                <h5 class="card-title">Card title</h5>
-                                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 d-lg-block d-none">
-                                            <div class="card-body">
-                                                <a href="#"> <i class="bi bi-x-lg text-dark" style="padding-left: 120px;"></i></a>
-                                            </div>
-                                        </div>
+                                <?php
+                                for ($i = 0; $i < $cn; $i++) {
 
+                                    $cr = $cartrs->fetch_assoc();
+                                    $productrs = Database::search("SELECT * FROM `product` WHERE `id`='" . $cr["product_id"] . "' ;");
+                                    $pr = $productrs->fetch_assoc();
+
+                                    $total = $total + ($pr["price"] * $cr["qty"]);
+
+                                    $ship = "0";
+
+                                    $ship = $pr["delivery_fee"];
+
+                                    $shipping = $shipping + $pr["delivery_fee"];
+
+                                    $imagers = Database::search("SELECT * FROM `images` WHERE `product_id`='" . $pr["id"] . "';");
+                                    $imd = $imagers->fetch_assoc();
+                                ?>
+
+                                    <div class="card shadow mb-3" style="max-width: 700px;">
+                                        <div class="row g-0">
+                                            <div class="col-md-3 d-block d-md-none d-lg-none">
+                                                <div class="card-body">
+                                                    <a onclick="deleteModelPop(<?php echo $pr['id']; ?>);" class="d-flex text-end float-end"> <i class="bi bi-x-lg text-dark fs-5"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <img src="<?php echo $imd["code"]; ?>" class="img-fluid rounded-start" data-bs-toggle="popover" title="PRODUCT DETAILS" data-bs-content="<?php echo $pr["description"]; ?>" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card-body">
+                                                    <h5 class="card-title fw-bolder fs-5"><?php echo $pr["title"]; ?></h5>
+                                                    <hr>
+                                                    <span class="card-text fw-bold">COLOUR :</span>&nbsp;<span class="text-secondary fw-bold"><?php echo $cr["color"]; ?></span>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="card-text fw-bold">SIZE :</span>&nbsp;<span class="text-secondary fw-bold"><?php echo $cr["size"]; ?></span>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="card-text fw-bold">QTY :</span>&nbsp;<span class="text-secondary fw-bold"><?php echo $cr["qty"]; ?></span>
+                                                    <hr>
+                                                    <span class="card-text fw-bold">Price :</span>&nbsp;<span class="text-danger fw-bolder">Rs. <?php echo $pr["price"]; ?> .00 /=</span>
+                                                    
+                                                    <hr>
+                                                    <span class="fw-bolder text-secondary">Requested Total <i class="bi bi-info-circle"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <span class="fw-bold text-dark">Rs. <?php echo ($pr["price"] * $cr["qty"]); ?>.00 /=</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3 d-lg-block d-none">
+                                                <div class="card-body">
+                                                    <a onclick="deleteModelPop(<?php echo $pr['id']; ?>);"class="d-flex text-end float-end"> <i class="bi bi-x-lg text-dark"></i></a>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                </div>
+                                    <!-- Delete model -->
+                                    <div class="modal" tabindex="-1" id="deleteCart<?php echo $pr["id"]; ?>">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-dark"><span class="text-warning">Dilox</span> clothing</h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are You Sure Want to Remove This Product From Cart ?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" onclick="deleteFromCart(<?php echo $cr['id'];?>,<?php echo $pr['id'];?>);">Remove</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- model -->
+                                <?php
+                                }
+                                ?>
                             </div>
 
                         </div>
                 </div>
-                <div class="col-lg-5 col-12" style="background-color: rgb(218, 216, 213);">
+                <div class="col-lg-5 col-12" style="background-color: rgb(226, 225, 223);">
                     <div class="row">
                         <div class="col-12">
                             <div class="row mt-2">
@@ -95,26 +147,26 @@ if (isset($_SESSION["u"])) {
                                 </div>
                                 <hr class="border border-2 border-dark">
                                 <div class="col-6">
-                                    <p class="fs-5">Items(1)</p>
+                                    <p class="fs-5 fw-bolder">Items <span class="text-secondary fw-bolder">(<?php echo $cn; ?>)</span></p>
                                 </div>
-                                <div class="offset-2 col-3">
-                                    <p class="fs-5">Rs.84,000.00</p>
+                                <div class="offset-2 col-4">
+                                    <p class="fs-5 fw-bolder">Rs. <?php echo $total; ?>.00 /=</p>
                                 </div>
                                 <div class="col-6 mt-2">
-                                    <span class="fs-5">Shipping</span>
+                                    <span class="fs-5 fw-bolder">Shipping</span>
                                 </div>
-                                <div class="offset-2 col-3 mt-2">
-                                    <p class="fs-5">Rs.200.00</p>
+                                <div class="offset-2 col-4 mt-2">
+                                    <p class="fs-5 fw-bolder">Rs. <?php echo $shipping; ?>.00 /=</p>
                                 </div>
                                 <hr class="border border-2 border-dark">
                                 <div class="col-6 mt-2">
-                                    <span class="fw-bold fs-5">Total Cost :</span>
+                                    <span class="fw-bold fs-4">Total Cost :</span>
                                 </div>
-                                <div class="offset-2 col-3 mt-2">
-                                    <p class="fs-5">Rs.84,000.00</p>
+                                <div class="offset-2 col-4 mt-2">
+                                    <p class="fs-4 fw-bold">Rs. <?php echo $total + $shipping; ?>.00 /=</p>
                                 </div>
-                                <div class="col-12 mt-2 button1 text-center" style="cursor: pointer;">
-                                    <span class="fs-3">CHECKOUT</span>
+                                <div class="col-12 mt-2 button1 text-center" style="cursor: pointer;" onclick="payNow();">
+                                    <span class="fs-3" >CHECKOUT</span>
                                 </div>
                             </div>
                         </div>
@@ -149,9 +201,20 @@ if (isset($_SESSION["u"])) {
 
     </div>
 
+    
     <script src="script.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="bootstrap.js"></script>
     <script src="bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
+    
+    <script type="text/javascript">
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+    </script>
 
 
     </body>
@@ -189,6 +252,7 @@ if (isset($_SESSION["u"])) {
         <script src="script.js"></script>
         <script src="bootstrap.js"></script>
         <script src="bootstrap.bundle.js"></script>
+        
     </body>
 
 

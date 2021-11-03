@@ -73,18 +73,26 @@ if (isset($_SESSION["a"])) {
                                 <div class="offset-lg-1 col-11 col-lg-3 mt-3 mb-3 border border-start border-end-0 border-top-0 border-bottom-0 border-5 border-primary rounded" style="background-color: #e7f2ff;">
                                     <div class="row">
                                         <div class="col-12 mt-3 mb-3">
+                                            <?php
+                                            $invoice = Database::search("SELECT SUM(`total`) AS month FROM `invoice` WHERE MONTH(`date`)=MONTH(CURDATE()) AND YEAR(`date`)=YEAR(CURDATE());");
+                                            $invoiceMonth = $invoice->fetch_assoc();
+                                            ?>
                                             <label class="from-label fw-bold">EARNINGS&nbsp;&nbsp;(MONTHLY):</label>
                                             <br />
-                                            <label class="from-label mt-1"> Rs .40000. 00</label>
+                                            <label class="from-label mt-1"> Rs .<?php echo $invoiceMonth["month"]; ?>. 00</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="offset-lg-1 col-11 col-lg-3 mt-3 mb-3 border border-start border-end-0 border-top-0 border-bottom-0 border-5 border-success rounded" style="background-color:rgb(183, 255, 189);">
                                     <div class="row">
                                         <div class="col-12 mt-3 mb-3">
+                                            <?php
+                                            $invoice = Database::search("SELECT SUM(`total`) AS year FROM `invoice` WHERE YEAR(`date`)=YEAR(CURDATE());");
+                                            $invoiceMonth = $invoice->fetch_assoc();
+                                            ?>
                                             <label class="from-label fw-bold">EARNINGS&nbsp;&nbsp;(ANNUAL):</label>
                                             <br />
-                                            <label class="from-label mt-1"> Rs .40000. 00</label>
+                                            <label class="from-label mt-1"> Rs .<?php echo $invoiceMonth["year"]; ?>. 00</label>
                                         </div>
                                     </div>
                                 </div>
@@ -110,27 +118,39 @@ if (isset($_SESSION["a"])) {
                                 <div class="offset-lg-1 col-11 col-lg-3 mt-3 mb-3 border border-start border-end-0 border-top-0 border-bottom-0 border-5 border-warning rounded" style="background-color: rgb(250, 249, 173);">
                                     <div class="row">
                                         <div class="col-12 mt-3 mb-3">
+                                            <?php
+                                            $invoice = Database::search("SELECT COUNT(*) AS sellmonth FROM invoice_item i, invoice v WHERE MONTH(v.`date`)=MONTH(CURDATE()) AND i.invoice_id=v.id;");
+                                            $invoiceMonth = $invoice->fetch_assoc();
+                                            ?>
                                             <label class="from-label fw-bold">SELLINGS&nbsp;&nbsp;(MONTHLY):</label>
                                             <br />
-                                            <label class="from-label mt-1"> 10 Items</label>
+                                            <label class="from-label mt-1"><?php echo $invoiceMonth["sellmonth"]; ?> Items</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="offset-lg-1 col-11 col-lg-3 mt-3 mb-3 border border-start border-end-0 border-top-0 border-bottom-0 border-5 border-secondary rounded" style="background-color:rgb(235, 229, 220);">
                                     <div class="row">
                                         <div class="col-12 mt-3 mb-3">
+                                            <?php
+                                            $invoice = Database::search("SELECT COUNT(*) AS selltoday FROM invoice_item i, invoice v WHERE DATE(v.`date`)=DATE(CURDATE()) AND i.invoice_id=v.id;");
+                                            $invoiceMonth = $invoice->fetch_assoc();
+                                            ?>
                                             <label class="from-label fw-bold">SELLINGS&nbsp;&nbsp;(TODAY):</label>
                                             <br />
-                                            <label class="from-label mt-1"> 10 Items</label>
+                                            <label class="from-label mt-1"> <?php echo $invoiceMonth["selltoday"]; ?> Items</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="offset-lg-1 col-11 col-lg-3 mt-3 mb-3 border border-start border-end-0 border-top-0 border-bottom-0 border-5 border-dark rounded" style="background-color: rgb(168, 165, 165);">
                                     <div class="row">
                                         <div class="col-12 mt-3 mb-3">
+                                            <?php
+                                            $invoice = Database::search("SELECT COUNT(*) AS selltotal FROM invoice_item ;");
+                                            $invoiceMonth = $invoice->fetch_assoc();
+                                            ?>
                                             <label class="from-label fw-bold">TOTAL SELLING</label>
                                             <br />
-                                            <label class="from-label mt-1">10 Items</label>
+                                            <label class="from-label mt-1"><?php echo $invoiceMonth["selltotal"]; ?> Items</label>
                                         </div>
                                     </div>
                                 </div>
@@ -146,6 +166,10 @@ if (isset($_SESSION["a"])) {
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body">
+                                                    <?php
+                                                    $soldItem = Database::search("SELECT COUNT(`product_id`) AS selltotal,`product_id` FROM invoice_item GROUP BY `product_id` ORDER BY selltotal DESC LIMIT 1;");
+                                                    $SId = $invoice->fetch_assoc();
+                                                    ?>
                                                     <h4 class="text-warning fw-bold">MOST SOLD ITEM <i class="bi bi-star-fill"></i></h4>
                                                     <h5 class="card-title">Card title</h5>
                                                     <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -173,22 +197,22 @@ if (isset($_SESSION["a"])) {
                                 <div class="offset-lg-1 col-lg-11 col-12 mt-3 mb-3">
                                     <table class="table table-striped">
                                         <thead>
-                                        <tr>
-                                            <th class="d-lg-table-cell d-none">Order Id</th>
-                                            <th>Product</th>
-                                            <th>Buyer</th>
-                                            <th>Price</th>
-                                            <th>Qty</th>
-                                        </tr>
+                                            <tr>
+                                                <th class="d-lg-table-cell d-none">Order Id</th>
+                                                <th>Product</th>
+                                                <th>Buyer</th>
+                                                <th>Price</th>
+                                                <th>Qty</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td class="d-lg-table-cell d-none">#12121212</td>
-                                            <td>Solid Pant </td>
-                                            <td>Vinul Gajaman</td>
-                                            <td>Rs.3000.00</td>
-                                            <td>24</td>
-                                        </tr>
+                                            <tr>
+                                                <td class="d-lg-table-cell d-none">#12121212</td>
+                                                <td>Solid Pant </td>
+                                                <td>Vinul Gajaman</td>
+                                                <td>Rs.3000.00</td>
+                                                <td>24</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
