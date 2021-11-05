@@ -79,18 +79,74 @@ if (isset($_SESSION["a"])) {
                                         <th class="fs-5 d-lg-table-cell d-none">Register Date</th>
                                     </tr>
                                 </thead>
-                            
+
                                 <tbody id="loadProducts">
-                                    
+
                                 </tbody>
                             </table>
 
 
                         </div>
+                        <hr>
+                        <div class="col-12">
+                            <h3 class="text-dark">Manage Categories</h3>
+                        </div>
+                        <hr class="border border-info border-2">
+                        <?php
 
-                        
+                        $categoryrs = Database::search("SELECT * FROM `category`;");
+                        $num = $categoryrs->num_rows;
+
+                        for ($i = 0; $i < $num; $i++) {
+
+                            $row = $categoryrs->fetch_assoc();
+                        ?>
+
+                            <div class="col-10 col-lg-3 mt-1 mb-1">
+                                <div class="row g-1 px-1">
+                                    <div class="col-12 text-center bg-body border border-2 border-secondary shadow rounded">
+                                        <label class="form-label fs-4 fw-bold py-3"><?php echo $row["name"]; ?></label>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php
+                        }
+
+                        ?>
+                        <div class="col-10 col-lg-3 mt-1 mb-1">
+                            <div class="row g-1 px-1">
+                                <div class="col-12 text-center bg-body border border-2 border-secondary shadow rounded">
+                                    <label class="form-label fs-4 fw-bold py-3" style="cursor: pointer;" onclick="addnewModal();">Add(+)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal" tabindex="-1" id="addnewModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-dark"><span class="text-warning">Dilox</span> clothing</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="col-12">
+                                            <p>Add New Category.</p>
+                                            <p id="msg" class="text-danger"></p>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-bold">Caregory Name :</label>
+                                            <input type="text" class="form-control" id="categorytext" />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" onclick="saveCategory();">Save Changes</button>
+                                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancle</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
+
 
 
                 </div>

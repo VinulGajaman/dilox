@@ -12,7 +12,7 @@ $pageno = $_POST["p"];
 
 $search = Database::search("SELECT * FROM `product` WHERE `title` LIKE '%" . $m . "%';");
 $d = $search->num_rows;
-$results_per_page = 10;
+$results_per_page = 8;
 $number_of_pages = ceil($d / $results_per_page);
 $offset = ((int)$pageno - 1) * $results_per_page;
 $selectedproducts = Database::search("SELECT * FROM `product` WHERE `title` LIKE '%" . $m . "%' LIMIT $results_per_page OFFSET $offset");

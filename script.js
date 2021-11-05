@@ -1119,3 +1119,41 @@ function signOutAdmin() {
     r.send();
 
 }
+
+////add category
+
+function addnewModal() {
+
+    var pop = document.getElementById("addnewModal");
+    k = new bootstrap.Modal(pop);
+    k.show();
+
+}
+
+function saveCategory() {
+
+    var txt = document.getElementById("categorytext").value;
+    var msg = document.getElementById("msg");
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+
+            var text = r.responseText;
+
+            if (text == "success") {
+
+                k.hide();
+                window.location = "manageProduct.php";
+
+            } else {
+                msg.innerHTML = text;
+            }
+        }
+
+    };
+
+    r.open("GET", "addNewCategoryProcess.php?t=" + txt, true);
+    r.send();
+}
