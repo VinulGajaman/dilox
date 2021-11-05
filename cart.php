@@ -68,12 +68,12 @@ if (isset($_SESSION["u"])) {
 
                                     $total = $total + ($pr["price"] * $cr["qty"]);
 
-                                    $ship = "0";
+                                    if ($i == 0) {
+                                        $shipping = $pr["delivery_fee"];
+                                    } else {
 
-                                    $ship = $pr["delivery_fee"];
-
-                                    $shipping = $shipping + $pr["delivery_fee"];
-
+                                        $shipping = $shipping + $pr["delivery_fee"]/2;
+                                    }
                                     $imagers = Database::search("SELECT * FROM `images` WHERE `product_id`='" . $pr["id"] . "';");
                                     $imd = $imagers->fetch_assoc();
                                 ?>
@@ -97,16 +97,19 @@ if (isset($_SESSION["u"])) {
                                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="card-text fw-bold">QTY :</span>&nbsp;<span class="text-secondary fw-bold"><?php echo $cr["qty"]; ?></span>
                                                     <hr>
                                                     <span class="card-text fw-bold">Price :</span>&nbsp;<span class="text-danger fw-bolder">Rs. <?php echo $pr["price"]; ?> .00 /=</span>
-                                                    
+
                                                     <hr>
                                                     <span class="fw-bolder text-secondary">Requested Total <i class="bi bi-info-circle"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                     <span class="fw-bold text-dark">Rs. <?php echo ($pr["price"] * $cr["qty"]); ?>.00 /=</span>
+                                                    <br>
+                                                    <a href="singleProductView.php?id=<?php echo $pr["id"]; ?>" class="text-primary fw-bold float-start">View Product >></a>
                                                 </div>
                                             </div>
 
+
                                             <div class="col-md-3 d-lg-block d-none">
                                                 <div class="card-body">
-                                                    <a onclick="deleteModelPop(<?php echo $pr['id']; ?>);"class="d-flex text-end float-end"> <i class="bi bi-x-lg text-dark"></i></a>
+                                                    <a onclick="deleteModelPop(<?php echo $pr['id']; ?>);" class="d-flex text-end float-end"> <i class="bi bi-x-lg text-dark"></i></a>
                                                 </div>
                                             </div>
 
@@ -123,7 +126,7 @@ if (isset($_SESSION["u"])) {
                                                     <p>Are You Sure Want to Remove This Product From Cart ?</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                <button type="button" class="btn btn-danger" onclick="deleteFromCart(<?php echo $cr['id'];?>,<?php echo $pr['id'];?>);">Remove</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteFromCart(<?php echo $cr['id']; ?>,<?php echo $pr['id']; ?>);">Remove</button>
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                 </div>
                                             </div>
@@ -135,6 +138,42 @@ if (isset($_SESSION["u"])) {
                                 }
                                 ?>
                             </div>
+                            <!-- alert model -->
+                            <div class="modal" tabindex="-1" id="paydismiss">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-dark"><span class="text-warning">Dilox</span> clothing</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p id="alert3"></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- model -->
+                            <!-- success model -->
+                            <div class="modal" tabindex="-1" id="paydismiss">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-dark"><span class="text-warning">Dilox</span> clothing</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p id="alert3"></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="goToProfile();">Ok</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- model -->
 
                         </div>
                 </div>
@@ -146,27 +185,27 @@ if (isset($_SESSION["u"])) {
                                     <h1 style="color: rgb(216, 153, 37);">Total Summary</h1>
                                 </div>
                                 <hr class="border border-2 border-dark">
-                                <div class="col-6">
+                                <div class="col-5 col-lg-6">
                                     <p class="fs-5 fw-bolder">Items <span class="text-secondary fw-bolder">(<?php echo $cn; ?>)</span></p>
                                 </div>
-                                <div class="offset-2 col-4">
+                                <div class="offset-2 col-5 col-lg-4">
                                     <p class="fs-5 fw-bolder">Rs. <?php echo $total; ?>.00 /=</p>
                                 </div>
-                                <div class="col-6 mt-2">
+                                <div class="col-5 col-lg-6 mt-2">
                                     <span class="fs-5 fw-bolder">Shipping</span>
                                 </div>
-                                <div class="offset-2 col-4 mt-2">
+                                <div class="offset-2 col-5 col-lg-4 mt-2">
                                     <p class="fs-5 fw-bolder">Rs. <?php echo $shipping; ?>.00 /=</p>
                                 </div>
                                 <hr class="border border-2 border-dark">
-                                <div class="col-6 mt-2">
+                                <div class="col-5 col-lg-6 mt-2">
                                     <span class="fw-bold fs-4">Total Cost :</span>
                                 </div>
-                                <div class="offset-2 col-4 mt-2">
+                                <div class="offset-2 col-5 col-lg-4 mt-2">
                                     <p class="fs-4 fw-bold">Rs. <?php echo $total + $shipping; ?>.00 /=</p>
                                 </div>
                                 <div class="col-12 mt-2 button1 text-center" style="cursor: pointer;" onclick="payNow();">
-                                    <span class="fs-3" >CHECKOUT</span>
+                                    <span class="fs-3">CHECKOUT</span>
                                 </div>
                             </div>
                         </div>
@@ -201,14 +240,14 @@ if (isset($_SESSION["u"])) {
 
     </div>
 
-    
+
     <script src="script.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="bootstrap.js"></script>
     <script src="bootstrap.bundle.js"></script>
     <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
-    
+
     <script type="text/javascript">
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
         var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
@@ -252,7 +291,7 @@ if (isset($_SESSION["u"])) {
         <script src="script.js"></script>
         <script src="bootstrap.js"></script>
         <script src="bootstrap.bundle.js"></script>
-        
+
     </body>
 
 

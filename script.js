@@ -696,11 +696,18 @@ function loadSize(c, id) {
 
 function changeQty() {
 
+
     var element = $('#sizeSelect').find('option:selected');
     var av = element.attr("qty");
-    document.getElementById("pqty").max = av;
-    $('#changeStock').text(av);
+    if (av <= 0) {
 
+        $('#changeStock').text("Out Of Stock");
+        document.getElementById("addToCart").disabled = true;
+    } else {
+        document.getElementById("pqty").max = av;
+        $('#changeStock').text(av);
+        document.getElementById("addToCart").disabled = false;
+    }
 }
 
 ///add to cart
@@ -724,9 +731,11 @@ $("#cartForm").submit(function(e) {
         if (r.readyState == 4) {
             var text = r.responseText;
 
+
             var dm = document.getElementById("success");
             var k = new bootstrap.Modal(dm);
             k.show();
+            document.getElementById("msg").innerHTML = text;
 
         }
     };
@@ -783,72 +792,84 @@ function payNow() {
 
         if (r.readyState == 4) {
             var text = r.responseText;
-            var obj = JSON.parse(text);
+            console.log(text);
 
-            var mail = obj["email"];
-            var amount = obj["amount"];
-            var orderId = obj["id"];
-            var delivery = obj["delivery_fee"];
+            if (text == "Please Update Your Profile") {
+                var dm = document.getElementById("paydismiss");
+                var k = new bootstrap.Modal(dm);
+                k.show();
+                document.getElementById("alert3").innerHTML = text;
 
-            if (text == 1) {
-                alert("Please Sign In First.");
-                window.location = "index.php";
-
-            } else if (text == 2) {
-                alert("Please Update Your Profile First");
-                window.location = "userProfile.php";
             } else {
 
-                // Called when user completed the payment. It can be a successful payment or failure
-                payhere.onCompleted = function onCompleted(orderId) {
-                    console.log("Payment completed. OrderID:" + orderId);
 
-                    saveInvoice(orderId, amount, delivery);
+                var obj = JSON.parse(text);
 
-                    //Note: validate the payment and show success or failure page to the customer
-                };
+                if (obj["status"] == 1) {
 
-                // Called when user closes the payment without completing
-                payhere.onDismissed = function onDismissed() {
-                    //Note: Prompt user to pay again or show an error page
-                    console.log("Payment dismissed");
-                };
+                    var dm = document.getElementById("paydismiss");
+                    var k = new bootstrap.Modal(dm);
+                    k.show();
+                    document.getElementById("alert3").innerHTML = "Product Has been Sold Out or Reduce Quantity & Try Again.(" + obj["title"] + "-" + obj["color"] + "-" + obj["size"] + ")";
 
-                // Called when error happens when initializing payment such as invalid parameters
-                payhere.onError = function onError(error) {
-                    // Note: show an error page
-                    console.log("Error:" + error);
-                };
+                } else {
 
-                // Put the payment variables here
-                var payment = {
-                    "sandbox": true,
-                    "merchant_id": "1217969", // Replace your Merchant ID
-                    "return_url": "http://localhost/dilox/home.php", // Important
-                    "cancel_url": "http://localhost/dilox/home.php", // Important
-                    "notify_url": "http://sample.com/notify",
-                    "order_id": obj["id"],
-                    "items": obj["item"],
-                    "amount": amount + ".00",
-                    "currency": "LKR",
-                    "first_name": obj["fname"],
-                    "last_name": obj["lname"],
-                    "email": mail,
-                    "phone": obj["mobile"],
-                    "address": obj["address"],
-                    "city": obj["city"],
-                    "country": "Sri Lanka",
-                    "delivery_address": "No. 46, Galle road, Kalutara South",
-                    "delivery_city": "Kalutara",
-                    "delivery_country": "Sri Lanka",
-                    "custom_1": "",
-                    "custom_2": ""
-                };
+                    var mail = obj["email"];
+                    var amount = obj["amount"];
+                    var orderId = obj["id"];
+                    var delivery = obj["delivery_fee"];
 
-                // Show the payhere.js popup, when "PayHere Pay" is clicked
+                    // Called when user completed the payment. It can be a successful payment or failure
+                    payhere.onCompleted = function onCompleted(orderId) {
+                        console.log("Payment completed. OrderID:" + orderId);
 
-                payhere.startPayment(payment);
+                        saveInvoice(orderId, amount, delivery);
 
+                        //Note: validate the payment and show success or failure page to the customer
+                    };
+
+                    // Called when user closes the payment without completing
+                    payhere.onDismissed = function onDismissed() {
+                        //Note: Prompt user to pay again or show an error page
+                        console.log("Payment dismissed");
+                    };
+
+                    // Called when error happens when initializing payment such as invalid parameters
+                    payhere.onError = function onError(error) {
+                        // Note: show an error page
+                        console.log("Error:" + error);
+                    };
+
+                    // Put the payment variables here
+                    var payment = {
+                        "sandbox": true,
+                        "merchant_id": "1217969", // Replace your Merchant ID
+                        "return_url": "http://localhost/dilox/home.php", // Important
+                        "cancel_url": "http://localhost/dilox/home.php", // Important
+                        "notify_url": "http://sample.com/notify",
+                        "order_id": obj["id"],
+                        "items": obj["item"],
+                        "amount": amount + ".00",
+                        "currency": "LKR",
+                        "first_name": obj["fname"],
+                        "last_name": obj["lname"],
+                        "email": mail,
+                        "phone": obj["mobile"],
+                        "address": obj["address"],
+                        "city": obj["city"],
+                        "country": "Sri Lanka",
+                        "delivery_address": "No. 46, Galle road, Kalutara South",
+                        "delivery_city": "Kalutara",
+                        "delivery_country": "Sri Lanka",
+                        "custom_1": "",
+                        "custom_2": ""
+                    };
+
+                    // Show the payhere.js popup, when "PayHere Pay" is clicked
+
+                    payhere.startPayment(payment);
+
+                }
             }
         }
 
@@ -857,6 +878,10 @@ function payNow() {
     r.open("GET", "buyNowProcess.php?id=1", true);
     r.send();
 }
+
+
+
+
 
 function saveInvoice(id, amount, d) {
 
@@ -888,4 +913,209 @@ function saveInvoice(id, amount, d) {
 
     r.open("POST", "saveInvoice.php", true);
     r.send(f);
+}
+
+//add FeedBack
+function addFeedback(id) {
+
+    var feedmodel = document.getElementById("feedbackModal" + id);
+    k = new bootstrap.Modal(feedmodel);
+    k.show();
+
+}
+
+//add FeedBack
+
+//saveFeedback
+
+function saveFeedback(id) {
+
+    var pid = id;
+    var feedtxt = document.getElementById("feedtxt" + pid).value;
+    var f = new FormData();
+
+    f.append("i", pid);
+    f.append("ft", feedtxt);
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+
+            var text = r.responseText;
+
+            if (text == "1") {
+                k.hide();
+                window.location = "purchaseHistory.php";
+            }
+        }
+
+    };
+
+    r.open("POST", "saveFeedbackProcess.php", true);
+    r.send(f);
+}
+
+//saveFeedback
+
+//delete From Histroy
+
+function addDelete(id) {
+
+    var feedmodel = document.getElementById("deleteModal" + id);
+    k = new bootstrap.Modal(feedmodel);
+    k.show();
+
+}
+
+function deleteHistory(id) {
+
+    var pid = id;
+    var f = new FormData();
+    f.append("i", pid);
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+
+            var text = r.responseText;
+
+            if (text == 1) {
+                k.hide();
+                window.location = "purchaseHistory.php";
+            }
+        }
+
+    };
+
+    r.open("POST", "deleteHistoryProcess.php", true);
+    r.send(f);
+
+}
+
+//delete From Histroy
+
+//Prodcut Selling Histroy
+
+
+function history(x) {
+
+    var from = document.getElementById("from").value;
+    var to = document.getElementById("to").value;
+    var page = x;
+
+    var f = new FormData();
+    f.append("f", from);
+    f.append("t", to);
+    f.append("p", page);
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+
+            var text = r.responseText;
+
+            document.getElementById("historyLoad").innerHTML = text;
+        }
+
+    };
+
+    r.open("POST", "ProductHistoryProcess.php", true);
+    r.send(f);
+
+}
+
+
+//search manage Products
+
+function manageProducts(x) {
+
+    var m = document.getElementById("manageProducts").value;
+    var x = x;
+
+    var f = new FormData();
+    f.append("m", m);
+    f.append("p", x);
+
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+
+        if (r.readyState == 4) {
+
+            var text = r.responseText;
+
+            document.getElementById("loadProducts").innerHTML = text;
+        }
+
+    };
+
+    r.open("POST", "ManageProductsProcess.php", true);
+    r.send(f);
+}
+
+function viewModel(id) {
+    var feedmodel = document.getElementById("viewProduct" + id);
+    k = new bootstrap.Modal(feedmodel);
+    k.show();
+
+}
+
+////delivery
+
+function deliver(x) {
+
+    var id = x;
+
+    var blockbtn = document.getElementById("btn" + id);
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+        if (r.readyState == 4) {
+            var t = r.responseText;
+
+            if (t == "success1") {
+
+                blockbtn.className = "btn btn-danger";
+                blockbtn.innerHTML = "Deliver"
+
+            } else if (t == "success2") {
+
+                blockbtn.className = "btn btn-success";
+                blockbtn.innerHTML = "Delivered"
+
+            }
+        }
+    }
+
+    r.open("GET", "deliveryProcess.php?id=" + id, true);
+    r.send();
+
+}
+
+function signOutAdmin() {
+
+    var r = new XMLHttpRequest();
+
+    r.onreadystatechange = function() {
+        if (r.readyState == 4) {
+            var text = r.responseText;
+
+            if (text == "success") {
+
+                window.location = "adminsignIn.php";
+            }
+        }
+    }
+
+    r.open("GET", "signOutAdmin.php", true);
+    r.send();
+
 }

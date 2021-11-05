@@ -39,17 +39,17 @@
                         <li><a href="watchlist.php">Watchlist</a></li>
                         <li><a href="cart.php">Cart</a></li>
                         <li><a href="profile.php">Profile</a></li>
-                        <li><a href="purshaceHistory.php">Puchase History</a></li>
+                        <li><a href="purchaseHistory.php">Puchase History</a></li>
 
                     </ul>
                 </nav>
             </div>
             <div class=" offset-10 col-2 d-lg-none d-block">
-                <div class="dropdown">
-                    <button class=" button1" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-list"></i>
+                <div class="dropdown ">
+                    <button class=" button1 " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-list "></i>
                     </button>
-                    <ul class="dropdown-menu form-control shadow" style="background-color:#f8e8c8;" aria-labelledby="dropdownMenuButton1">
+                    <ul class="dropdown-menu form-control shadow " style="background-color:#f8e8c8;" aria-labelledby="dropdownMenuButton1">
                         <li class="p-2"><a href="home.php" class="text-dark fw-bold">Home</a></li>
                         <br>
                         <li class="p-2"><a href="collection.php" class="text-dark fw-bold">Collection</a></li>
@@ -60,7 +60,7 @@
                         <br>
                         <li class="p-2"><a href="profile.php" class="text-dark fw-bold">Profile</a></li>
                         <br>
-                        <li class="p-2"><a href="purshaceHistory.php" class="text-dark fw-bold">Purchase histroy</a></li>
+                        <li class="p-2"><a href="purchaseHistory.php" class="text-dark fw-bold">Purchase histroy</a></li>
                     </ul>
                 </div>
             </div>

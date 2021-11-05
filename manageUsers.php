@@ -53,6 +53,7 @@ if (isset($_SESSION["a"])) {
                                     <a class="nav-link text-secondary fs-5" href="manageUsers.php">Manage Users</a>
                                     <a class="nav-link text-secondary fs-5" href="manageProduct.php">Manage Products</a>
                                     <a class="nav-link text-secondary fs-5" href="addProduct.php">Add Products</a>
+                                    <a class="nav-link text-danger fs-5" style="cursor: pointer;" onclick="signOutAdmin();">Log Out</a>
                                 </nav>
                             </div>
                         </div>

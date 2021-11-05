@@ -67,11 +67,15 @@ if (isset($_SESSION["u"]) && isset($_GET["id"])) {
                         <div class="row mt-2" style="background-color: rgb(226, 224, 218);">
                             <div class="col-lg-5 col-12 p-3">
                                 <h4 class="fw-bold ">INVOICE TO:</h4>
-                                <span class="fs-4">Vinul Gajaman</span>
+                                <?php
+                                $addressrs = Database::search("SELECT * FROM `user_has_address` WHERE `user_email` = '" . $uemail . "' ;");
+                                $ar = $addressrs->fetch_assoc();
+                                ?>
+                                <span class="fs-4"><?php echo $_SESSION["u"]["fname"] . " " . $_SESSION["u"]["lname"]; ?></span>
                                 <br>
-                                <span class="text-secondary">No.61 , Ellie House Lane</span>
+                                <span class="text-secondary"><?php echo $ar["line1"] . " " . $ar["line2"];  ?></span>
                                 <br>
-                                <a class="text-primary text-decoration-underline">vinulgajaman2001@gmail.com</a>
+                                <a class="text-primary text-decoration-underline"><?php echo $uemail; ?></a>
                             </div>
                             <div class="offset-lg-2 col-lg-5 col-12 p-3 text-lg-end">
                                 <h4 class="fw-bold text-warning fs-3 text-decoration-underline">Dilox Clothing</h4>
@@ -89,7 +93,7 @@ if (isset($_SESSION["u"]) && isset($_GET["id"])) {
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="fs-5">#</th>
+                                        <th class="fs-5 d-lg-table-cell d-none">#</th>
                                         <th class="fs-5">Product</th>
                                         <th class="fs-5">Unit price(Rs.)</th>
                                         <th class="fs-5">Qty</th>
@@ -106,7 +110,7 @@ if (isset($_SESSION["u"]) && isset($_GET["id"])) {
 
                                     ?>
                                         <tr>
-                                            <td><?php echo $itemdata["product_id"]; ?></td>
+                                            <td class="d-lg-table-cell d-none"><?php echo $itemdata["product_id"]; ?></td>
                                             <?php
                                             $product = Database::search("SELECT * FROM `product` WHERE `id`='" . $itemdata["product_id"] . "';");
                                             $productName = $product->fetch_assoc();

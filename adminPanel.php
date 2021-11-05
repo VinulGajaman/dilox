@@ -30,7 +30,7 @@ require "connection.php";
 if (isset($_SESSION["a"])) {
 ?>
 
-    <body>
+    <body onload="history(1);">
 
         <div class="container justify-content-center vh-100">
 
@@ -53,6 +53,7 @@ if (isset($_SESSION["a"])) {
                                     <a class="nav-link text-secondary fs-5" href="manageUsers.php">Manage Users</a>
                                     <a class="nav-link text-secondary fs-5" href="manageProduct.php">Manage Products</a>
                                     <a class="nav-link text-secondary fs-5" href="addProduct.php">Add Products</a>
+                                    <a class="nav-link text-danger fs-5" style="cursor: pointer;" onclick="signOutAdmin();">Log Out</a>
                                 </nav>
                             </div>
                         </div>
@@ -157,65 +158,73 @@ if (isset($_SESSION["a"])) {
                                 <div class="col-11">
                                     <hr>
                                 </div>
+                                <?php
+                                $soldItem = Database::search("SELECT COUNT(`product_id`) AS selltotal,`product_id`,`qty` FROM `invoice_item` GROUP BY `product_id` ORDER BY selltotal DESC LIMIT 1;");
+                                $SIn = $soldItem->num_rows;
+                                if ($SIn == 0) {
+                                } else {
+                                ?>
+                                    <div class="offset-lg-2 col-lg-8 col-11 mt-3">
+                                        <div class="card mb-3" style="max-width: 600px;">
+                                            <div class="row g-0">
+                                                <?php
+                                                $SId = $soldItem->fetch_assoc();
+                                                $img = Database::search("SELECT * FROM `images` WHERE `product_id`='" . $SId["product_id"] . "';");
+                                                $imgrs = $img->fetch_assoc();
+                                                ?>
 
-                                <div class="offset-lg-2 col-lg-8 col-11 mt-3">
-                                    <div class="card mb-3" style="max-width: 600px;">
-                                        <div class="row g-0">
-                                            <div class="col-md-4">
-                                                <img src="resourses/product/1.JPEG" class="img-fluid rounded-start" alt="...">
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="card-body">
-                                                    <?php
-                                                    $soldItem = Database::search("SELECT COUNT(`product_id`) AS selltotal,`product_id` FROM invoice_item GROUP BY `product_id` ORDER BY selltotal DESC LIMIT 1;");
-                                                    $SId = $invoice->fetch_assoc();
-                                                    ?>
-                                                    <h4 class="text-warning fw-bold">MOST SOLD ITEM <i class="bi bi-star-fill"></i></h4>
-                                                    <h5 class="card-title">Card title</h5>
-                                                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                                <div class="col-md-4">
+                                                    <img src="<?php echo $imgrs["code"]; ?>" class="img-fluid rounded-start" />
                                                 </div>
+                                                <div class="col-md-8">
+                                                    <div class="card-body">
+                                                        <?php
+                                                        $prod = Database::search("SELECT * FROM `product` WHERE `id`='" . $SId["product_id"] . "';");
+                                                        $prodrs = $prod->fetch_assoc();
+                                                        ?>
+                                                        <h4 class="text-warning fw-bold">MOST SOLD ITEM <i class="bi bi-star-fill"></i></h4>
+                                                        <h5 class="card-title"><?php echo $prodrs["title"]; ?></h5>
+                                                        <p class="card-text text-danger fw-bold">Rs.<?php echo $prodrs["price"];?> .00/=</p>
+                                                        <p class="card-text position-absolute bottom-0 end-0"><small class="text-muted"><?php echo $prodrs["datetime_added"]; ?></small></p>
+                                                    </div>
+                                                </div>
+                                            <?php
+                                        }
+                                            ?>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-11">
-                                    <hr>
-                                </div>
-                                <div class="offset-lg-1 col-lg-11 col-11 mt-3 text-center">
-                                    <h3 class="text-dark fw-bold">PRODUCTS SELLING HISTORY</h3>
-                                </div>
+                                    <div class="col-11">
+                                        <hr>
+                                    </div>
+                                    <div class="offset-lg-1 col-lg-11 col-11 mt-3 text-center">
+                                        <h3 class="text-dark fw-bold">PRODUCTS SELLING HISTORY</h3>
+                                    </div>
 
-                                <div class="offset-lg-1 col-lg-5 col-5 mt-3 text-center mb-3">
-                                    <label class="form-label fw-bold">From Date</label>
-                                    <input type="date" class="form-control" id="" />
-                                </div>
-                                <div class="offset-lg-1 col-lg-5 col-5 mt-3 text-center mb-3">
-                                    <label class="form-label fw-bold">To Date</label>
-                                    <input type="date" class="form-control" id="" />
-                                </div>
-                                <div class="offset-lg-1 col-lg-11 col-12 mt-3 mb-3">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="d-lg-table-cell d-none">Order Id</th>
-                                                <th>Product</th>
-                                                <th>Buyer</th>
-                                                <th>Price</th>
-                                                <th>Qty</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="d-lg-table-cell d-none">#12121212</td>
-                                                <td>Solid Pant </td>
-                                                <td>Vinul Gajaman</td>
-                                                <td>Rs.3000.00</td>
-                                                <td>24</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    <div class="offset-lg-1 col-lg-5 col-5 mt-3 text-center mb-3">
+                                        <label class="form-label fw-bold">From Date</label>
+                                        <input type="datetime-local" class="form-control" id="from" onchange="history(1);" max="<?php echo date("Y-m-d")."T".date("H:i"); ?>"/>
+                                    </div>
+                                    <div class="offset-lg-1 col-lg-5 col-5 mt-3 text-center mb-3">
+                                        <label class="form-label fw-bold">To Date</label>
+                                        <input type="datetime-local" class="form-control" id="to" onchange="history(1);"  max="<?php echo date("Y-m-d")."T".date("H:i"); ?>" />
+                                    </div>
+                                    <div class="offset-lg-1 col-lg-11 col-12 mt-3 mb-3">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th class="d-lg-table-cell d-none">Order Id</th>
+                                                    <th>Invoice Id</th>
+                                                    <th>Buyer</th>
+                                                    <th>Total</th>
+                                                
+                                                </tr>
+                                            </thead>
+                                            <tbody id="historyLoad">
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
                             </div>
                         </div>
                     </div>

@@ -25,6 +25,7 @@ if (isset($_SESSION["u"])) {
         $total = 0;
         $delivery_fee = 0;
 
+
         $cr = $addressrs->fetch_assoc();
 
         $cityId = $cr["city_id"];
@@ -38,19 +39,44 @@ if (isset($_SESSION["u"])) {
 
         $cart = Database::search("SELECT * FROM `cart` WHERE `user_email`='" . $email . "';");
 
+        $i = 0;
+
+        $status = 0;
+        $name = "";
+        $clr ="";
+        $size="";
 
         while ($cartdata = $cart->fetch_assoc()) {
 
             $productrs = Database::search("SELECT * FROM `product` WHERE `id`='" . $cartdata["product_id"] . "' ;");
             $pr = $productrs->fetch_assoc();
 
-            $delivery_fee += $pr["delivery_fee"];
+            $types = Database::search("SELECT * FROM `types` WHERE `product_id`='" . $pr["id"] . "' AND `color`='" . $cartdata["color"] . "' AND `size`='" . $cartdata["size"] . "';");
+            $typers = $types->fetch_assoc();
 
-            $total += $pr["price"] * $cartdata["qty"] + $pr["delivery_fee"];
+            if ($typers["qty"] < $cartdata["qty"]) {
+
+                $status = 1;
+                $name = $pr["title"];
+                $clr = $typers["color"];
+                $size = $typers["size"];
+            }
+
+            if ($i == 0) {
+                $i = 1;
+                $delivery_fee = $pr["delivery_fee"];
+            } else {
+
+                $delivery_fee += $pr["delivery_fee"] / 2;
+            }
+
+
+
+            $total += $pr["price"] * $cartdata["qty"];
         }
 
 
-        $amount = $total;
+        $amount = $total + $delivery_fee;
 
         $fname = $_SESSION["u"]["fname"];
         $lname = $_SESSION["u"]["lname"];
@@ -67,13 +93,14 @@ if (isset($_SESSION["u"])) {
         $array["mobile"] = $mobile;
         $array["address"] = $address;
         $array["city"] = $city;
+        $array["status"] = $status;
+        $array["title"] = $name;
+        $array["color"]=$clr;
+        $array["size"]=$size;
 
         echo json_encode($array);
     } else {
 
-        echo "2";
+        echo "Please Update Your Profile";
     }
-} else {
-
-    echo "1";
 }

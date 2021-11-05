@@ -22,7 +22,7 @@ for ($x = 0; $x < $categorynum; $x++) {
         </div>
         <div class="card-body">
             <h5 class="card-title fw-bold" style="font-size: 18px;"><?php echo $sresults["title"]; ?></h5>
-            <p class="text-danger">Rs.<?php echo $sresults["price"]; ?> .00</p>
+            <p class="text-danger">Rs.<?php echo $sresults["price"]; ?> .00 /=</p>
             <a href="singleProductView.php?id=<?php echo $sresults["id"]; ?>" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
 
             <?php

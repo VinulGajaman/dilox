@@ -141,7 +141,7 @@ require "connection.php";
                                         <li class="list-group-item"> <?php
 
                                                                         $size = Database::search("SELECT DISTINCT `size` FROM `types` WHERE `product_id`='" . $prod["pid"] . "';");
-                                                                        $sizenum = $type->num_rows;
+                                                                        $sizenum = $size->num_rows;
 
                                                                         while ($sizedata = $size->fetch_assoc()) {
 
@@ -152,7 +152,7 @@ require "connection.php";
                                                                         }
                                             ?>
                                         </li>
-                                        <li class="list-group-item text-danger fw-bold">Rs. <?php echo $prod["price"]; ?> .00</li>
+                                        <li class="list-group-item text-danger fw-bold">Rs. <?php echo $prod["price"]; ?> .00 /=</li>
                                     </ul>
                                     <div class="card-body">
                                         <a href="singleProductView.php?id=<?php echo $prod["pid"]; ?>" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>

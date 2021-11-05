@@ -124,6 +124,8 @@ require "connection.php";
                         </div>
                         <hr class="border border-warning border-1">
 
+                        <!--//////////////////////////// from/////////////////////////// -->
+
                         <form id="cartForm">
 
                             <div class="col-12 mt-2">
@@ -156,7 +158,7 @@ require "connection.php";
                             </div>
                             <div class="col-12 mt-3">
                                 <label class="text-secondary">AVAILABLITY :</label>
-                                <span class="text-warning" id="changeStock"></span>
+                                <span class="text-danger" id="changeStock"></span>
                             </div>
                             <!-- ////////////////////////// -->
                             <hr class="border border-warning border-3 mt-0">
@@ -184,10 +186,10 @@ require "connection.php";
                                     <?php
                                     if (isset($_SESSION["u"])) {
                                     ?>
-                                        <button type="sumbit" class="button1 fw-bold">Add to Cart</button>
+                                        <button type="sumbit" class="button1 fw-bold" id="addToCart">Add to Cart</button>
                                     <?php
-                                    }else{
-                                        ?>
+                                    } else {
+                                    ?>
                                         <button class="button1 fw-bold" onclick="model();">Add to Cart</button>
                                     <?php
                                     }
@@ -219,6 +221,7 @@ require "connection.php";
                                 </div>
                             </div>
                         </form>
+                         <!--//////////////////////////// from/////////////////////////// -->
                     </div>
                 </div>
                 <hr class="border border-warning border-3 mt-0">
@@ -228,12 +231,12 @@ require "connection.php";
                 </div>
                 <!-- realted items -->
                 <div class="offset-lg-10 col-lg-2 col-12 mt-3 mb-3">
-                    <a class="fw-bold" style="cursor: pointer;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">More From This Brand >></a>
+                    <a class="fw-bold" style="cursor: pointer;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">More From This Category >></a>
 
 
                     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                         <div class="offcanvas-header">
-                            <h5 id="offcanvasRightLabel" class="fw-bold">More From This Brand >></h5>
+                            <h5 id="offcanvasRightLabel" class="fw-bold">More From This Category >></h5>
 
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 
@@ -263,16 +266,38 @@ require "connection.php";
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title"><?php echo $relateddata["title"]; ?></h5>
-                                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                         </div>
                                         <ul class="list-group list-group-flush">
 
-                                            <li class="list-group-item">A second item</li>
-                                            <li class="list-group-item">A third item</li>
+                                            <li class="list-group-item text-danger fw-bold">Rs. <?php echo $relateddata["price"]; ?> .00 /=</li>
+                                            <li class="list-group-item">
+                                                <a href="singleProductView.php?id=<?php echo $relateddata["id"]; ?>" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
+
+                                                <?php
+                                                if (isset($_SESSION["u"])) {
+                                                ?>
+                                                    <?php
+                                                    $watchlist = Database::search("SELECT * FROM `watchlist` WHERE `product_id`='" . $relateddata["id"] . "';");
+                                                    $watchnum = $watchlist->num_rows;
+                                                    if ($watchnum == 1) {
+                                                        $heart = "bi-heart-fill";
+                                                    } else {
+                                                        $heart = "bi-heart";
+                                                    }
+                                                    ?>
+                                                    <a class="btn btn-outline-danger" onclick="addToWatchlist(<?php echo $relateddata['id']; ?>);"><i class="hart<?php echo $relateddata["id"]; ?> bi <?php echo  $heart; ?>"></i></a>
+                                                <?php
+                                                } else {
+                                                ?>
+                                                    <a class="btn btn-outline-danger" onclick="model();"><i class="bi bi-heart"></i></a>
+                                                <?php
+                                                }
+                                                ?>
+                                            </li>
                                         </ul>
-                                        <div class="card-body">
+                                        <!-- <div class="card-body">
                                             <a href="singleProductView.php?id=<?php echo $relateddata["id"]; ?>" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                 <?php
@@ -286,60 +311,61 @@ require "connection.php";
 
                 </div>
                 <!-- realted items -->
-            </div>
-            <hr class="border border-warning border-3 mt-0">
-            <div class="col-12 mt-3">
-                <h2 class="title1 " style="font-size: 50px;">Feedbacks....</h2>
-            </div>
-            <div class="col-12 mb-3">
-                <div class="row g-1">
-                    <?php
 
-                    $feedbackrs = Database::search("SELECT * FROM `feedback` WHERE `product_id`='16' ;");
-                    $feed = $feedbackrs->num_rows;
-
-                    if ($feed == 0) {
-                    ?>
-
-                        <div class="col-12 text-center">
-                            <label class="form-label fs-3 text-black-50">There are no Feedbacks to view.</label>
-                        </div>
-
+                <hr class="border border-warning border-3 mt-0">
+                <div class="col-12 mt-3">
+                    <h2 class="title1 " style="font-size: 50px;">Feedbacks....</h2>
+                </div>
+                <div class="col-12 mb-3">
+                    <div class="row">
                         <?php
-                    } else {
 
+                        $feedbackrs = Database::search("SELECT * FROM `feedback` WHERE `product_id`='" . $pid . "' ;");
+                        $feed = $feedbackrs->num_rows;
 
-                        for ($a = 0; $a < $feed; $a++) {
-                            $feedrow = $feedbackrs->fetch_assoc();
+                        if ($feed == 0) {
                         ?>
-                            <div class="col-12 col-lg-3 border border-1 border-secondary rounded p-1">
-                                <div class="row">
-                                    <?php
 
-                                    $profileImg = Database::search("SELECT * FROM `profile_img` WHERE `user_email`='" . $_SESSION["u"]["email"] . "' ;");
-                                    $pn = $profileImg->num_rows;
+                            <div class="col-12 text-center">
+                                <label class="form-label fs-3 text-black-50">There are no Feedbacks to view.</label>
+                            </div>
 
-                                    if ($pn == 1) {
-                                        $p = $profileImg->fetch_assoc();
-                                    ?>
+                            <?php
+                        } else {
+
+
+                            for ($a = 0; $a < $feed; $a++) {
+                                $feedrow = $feedbackrs->fetch_assoc();
+                            ?>
+                                <div class="col-12 col-lg-3 border border-1 border-secondary rounded">
+                                    <div class="row">
                                         <div class="col-3">
-                                            <img src="resourses/home_img/vinul.png" width="80" class="rounded-circle">
+                                            <?php
+
+                                            $profileImg = Database::search("SELECT * FROM `profile_img` WHERE `user_email`='" . $_SESSION["u"]["email"] . "' ;");
+                                            $pn = $profileImg->num_rows;
+
+                                            if ($pn == 1) {
+                                                $p = $profileImg->fetch_assoc();
+                                            ?>
+
+                                                <img src="resourses/home_img/vinul.png" width="80" class="rounded-circle">
 
 
-                                        <?php
-                                    } else {
+                                            <?php
+                                            } else {
 
-                                        ?>
+                                            ?>
 
-                                            <img src="resourses/home_img/user.svg" width="80" class="rounded-circle">
-                                        <?php
+                                                <img src="resourses/home_img/user.svg" width="80" class="rounded-circle">
+                                            <?php
 
-                                    }
+                                            }
 
-                                    $user = Database::search("SELECT * FROM `user` WHERE `email` ='" . $feedrow["user_email"] . "' ;");
-                                    $userData = $user->fetch_assoc();
+                                            $user = Database::search("SELECT * FROM `user` WHERE `email` ='" . $feedrow["user_email"] . "' ;");
+                                            $userData = $user->fetch_assoc();
 
-                                        ?>
+                                            ?>
                                         </div>
                                         <div class="col-7">
                                             <span class="fw-bold text-secondary"><?php echo $userData["fname"] . " " . $userData["lname"]; ?></span>
@@ -350,22 +376,32 @@ require "connection.php";
                                         <div class="col-12 text-end">
                                             <span class="text-black-50"><?php echo $feedrow["date"]; ?></span>
                                         </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                <?php
+                        <?php
+                            }
                         }
-                    }
-                }
+                        ?>
 
-                ?>
 
+
+                    </div>
                 </div>
+                <?php
+                require "footer.php";
+                ?>
             </div>
-            <?php
-            require "footer.php";
-            ?>
-        </div>
+        <?php
+    } else {
+        ?>
+            <script>
+                window.location = "home.php";
+            </script>
+        <?php
+    }
+
+        ?>
         <!-- model -->
         <div class="modal" tabindex="-1" id="alert">
             <div class="modal-dialog">
@@ -395,7 +431,7 @@ require "connection.php";
                         <h5 class="modal-title text-dark"><span class="text-warning">Dilox</span> clothing</h5>
                     </div>
                     <div class="modal-body">
-                        <p>Product Added to the Cart.</p>
+                        <p class="fw-bold text-danger" id="msg"></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>

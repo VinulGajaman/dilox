@@ -63,6 +63,8 @@ if (isset($_SESSION["a"])) {
                 </div>
                 <hr class="border border-warning border-2 d-lg-none d-block">
                 <div class="col-lg-8 col-12 pb-3 ps-4 mb-3">
+
+                <!-- /////////////////////////////from//////////////////////////////// -->
                     <form action="ProductUpdateprocess.php" method="POST" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-12 text-center">
@@ -75,7 +77,7 @@ if (isset($_SESSION["a"])) {
                             ?>
                                     <div class="col-11 col-lg-12">
                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                            Product Added Successfully.
+                                            Product Updated Successfully.
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         </div>
                                     </div>
@@ -130,7 +132,8 @@ if (isset($_SESSION["a"])) {
                             </div>
                             <div class="col-lg-6 col-12 p-3">
                                 <label class="form-label fw-bold fs-5 text-dark">Prodcut Title</label>
-                                <input class="form-control" type="text" name="ti" required value="<?php echo $pcd["title"]; ?>" />
+                                <input class="form-control text-uppercase" type="text" name="ti" required value="<?php echo $pcd["title"]; ?>" />
+                                <input type="hidden" value="<?php echo $pcd["id"]; ?>" name="pid">
                             </div>
                             <div class="col-12">
                                 <hr />
@@ -143,7 +146,7 @@ if (isset($_SESSION["a"])) {
                                             <th>Size</th>
                                             <th>Color</th>
                                             <th>Qty</th>
-                                            <th class="fs-5"><button type="button" class="btn btn-outline-dark" onclick="addRow();"><i class="bi bi-plus-circle"></i></button></th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -161,9 +164,9 @@ if (isset($_SESSION["a"])) {
 
                                                     </select>
                                                 </td>
-                                                <td><input class="form-control" type="text" name="color[]" value="<?php echo $typedata["color"]; ?>"  disabled /></td>
+                                                <td><input class="form-control" type="text" name="color[]" value="<?php echo $typedata["color"]; ?>"  required/><input type="hidden" value="<?php echo $typedata["id"]; ?>" name="typeid[]"/></td>
                                                 <td><input class="form-control" type="number" min="0" name="qty[]" value="<?php echo $typedata["qty"]; ?>" required /></td>
-                                                <td class="fs-5"><button class="btn btn-outline-dark" id="trash" type="button" onclick="m(this);"><i class="bi bi-trash"></i></button></td>
+                                               
                                             </tr>
                                         <?php
                                         }
@@ -214,6 +217,7 @@ if (isset($_SESSION["a"])) {
                                         $array[$x] = $f["code"];
                                 ?>
                                         <img class="col-6 col-lg-2 ms-2 img-thumbnail" src="<?php echo $array[$x]; ?>" id="prev<?php echo $x; ?>" />
+                                        <input type="hidden" value="<?php echo $array[$x]; ?>" name="img[]">
                                     <?php
                                     }
                                 } else if ($n == 2) {
@@ -222,7 +226,7 @@ if (isset($_SESSION["a"])) {
                                         $array[$x] = $f["code"];
                                     ?>
                                         <img class="col-6 col-lg-2 ms-2 img-thumbnail" src="<?php echo $array[$x]; ?>" id="prev<?php echo $x; ?>" />
-
+                                        <input type="hidden" value="<?php echo $array[$x]; ?>" name="img[]">
                                     <?php
                                     }
                                     ?>
@@ -236,7 +240,7 @@ if (isset($_SESSION["a"])) {
                                         $array[$x] = $f["code"];
                                     ?>
                                         <img class="col-6 col-lg-2 ms-2 img-thumbnail" src="<?php echo $array[$x]; ?>" id="prev<?php echo $x; ?>" />
-
+                                        <input type="hidden" value="<?php echo $array[$x]; ?>" name="img[]">
                                     <?php
                                     }
                                     ?>
@@ -260,8 +264,8 @@ if (isset($_SESSION["a"])) {
                                     <div class="col-8 col-lg-5 mt-2 offset-3 offset-lg-4">
                                         <div class="row">
                                             <div class="col-12 col-lg-6">
-                                                <input class="d-none" type="file" accept="image/*" id="imguploader" name="image[]" multiple />
-                                                <label class="btn btn-outline-dark col-6 col-lg-12" for="imguploader" onclick="changeImg();">Upload</label>
+                                                <!-- <input class="d-none" type="file" accept="image/*" id="imguploader" name="image[]" multiple />
+                                                <label class="btn btn-outline-dark col-6 col-lg-12" for="imguploader" onclick="changeImg();">Upload</label> -->
                                             </div>
                                         </div>
                                     </div>

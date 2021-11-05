@@ -116,7 +116,7 @@ for ($i = 0; $i < $n; $i++) {
                 }
                 ?>
             </li>
-            <li class="list-group-item fw-bold text-danger">Rs. <?php echo $pr["price"]; ?> .00</li>
+            <li class="list-group-item fw-bold text-danger">Rs. <?php echo $pr["price"]; ?> .00 /=</li>
         </ul>
         <div class="card-body">
             <a href="singleProductView.php?id=<?php echo $prodid; ?>" class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>

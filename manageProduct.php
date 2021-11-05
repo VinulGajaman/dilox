@@ -12,7 +12,7 @@ require "connection.php";
 
 <head>
 
-    <title>Dilox | Manage Users</title>
+    <title>Dilox | Manage Products</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -30,7 +30,7 @@ require "connection.php";
 if (isset($_SESSION["a"])) {
 ?>
 
-    <body>
+    <body onload="manageProducts(1);">
 
         <div class="container justify-content-center vh-100">
 
@@ -53,6 +53,7 @@ if (isset($_SESSION["a"])) {
                                     <a class="nav-link text-secondary fs-5" href="manageUsers.php">Manage Users</a>
                                     <a class="nav-link text-secondary fs-5" href="manageProduct.php">Manage Products</a>
                                     <a class="nav-link text-secondary fs-5" href="addProduct.php">Add Products</a>
+                                    <a class="nav-link text-danger fs-5" style="cursor: pointer;" onclick="signOutAdmin();">Log Out</a>
                                 </nav>
                             </div>
                         </div>
@@ -63,6 +64,9 @@ if (isset($_SESSION["a"])) {
                     <div class="row">
                         <div class="col-12 text-center">
                             <h1 class="title2 pt-3">Manage All Products</h1>
+                        </div>
+                        <div class="offset-2 col-8 text-center mt-3 mb-3">
+                            <input type="text" class="form-control" placeholder="Search any product..." onkeyup="manageProducts(1);" id="manageProducts">
                         </div>
                         <div class="col-12 p-2">
                             <table class="table" id="table1">
@@ -75,137 +79,16 @@ if (isset($_SESSION["a"])) {
                                         <th class="fs-5 d-lg-table-cell d-none">Register Date</th>
                                     </tr>
                                 </thead>
-                                <?php
-
-                                if (isset($_GET["page"])) {
-                                    $pageno = $_GET["page"];
-                                } else {
-                                    $pageno = 1;
-                                }
-
-
-                                $usersrs = Database::search("SELECT * FROM `product` ");
-                                $d = $usersrs->num_rows;
-                                $row = $usersrs->fetch_assoc();
-                                $result_per_page = 10;
-                                $number_of_pages = ceil($d / $result_per_page);
-                                $page_first_result = ((int)$pageno - 1) * $result_per_page;
-                                $selectedrs = Database::search("SELECT * FROM `product` LIMIT " . $result_per_page . " OFFSET " . $page_first_result . " ");
-                                $srn = $selectedrs->num_rows;
-
-                                $c = 0;
-                                ?>
-                                <tbody>
-                                    <?php
-                                    while ($srow = $selectedrs->fetch_assoc()) {
-                                        $c = $c + 1;
-                                    ?>
-
-
-
-                                        <tr>
-                                            <td class="d-lg-table-cell d-none"><?php echo $c; ?></td>
-                                            <?php
-                                            $profileimg = Database::search("SELECT * FROM `images` WHERE `product_id`='" . $srow["id"] . "' ");
-                                            $pnum = $profileimg->num_rows;
-                                            if ($pnum = 1) {
-                                                $pcode = $profileimg->fetch_assoc();
-                                            ?>
-                                                <td class="d-lg-table-cell d-none"><img src="<?php echo $pcode["code"]; ?>" style="height: 100px;"></td>
-                                            <?php
-                                            } else {
-                                            ?>
-                                                <td class="d-lg-table-cell d-none"><img src="resourses/home_img/user.svg" style="height: 80px;"></td>
-                                            <?php
-                                            }
-                                            ?>
-
-                                            <td class="fw-bold"><?php echo $srow["title"] ?></td>
-                                            <td>Rs.<?php echo $srow["price"]; ?>.00</td>
-                                            <td class="d-lg-table-cell d-none"><?php
-                                                                                $rd = $srow["datetime_added"];
-                                                                                $splitrd = explode(" ", $rd);
-                                                                                echo $splitrd[0];
-                                                                                ?></td>
-                                            <td>
-                                                <?php
-                                                $s = $srow["status_id"];
-                                                if ($s == "1") {
-                                                ?>
-                                                    <a class="btn btn-danger" onclick="blockProduct('<?php echo $srow['id']; ?>');" id="blockbtn<?php echo $srow['id']; ?>">Block</a>
-                                                <?php
-                                                } else {
-                                                ?>
-                                                    <a class="btn btn-success" onclick="blockProduct('<?php echo $srow['id']; ?>');" id="blockbtn<?php echo $srow['id']; ?>">Unblock</a>
-                                                <?php
-                                                }
-                                                ?>
-                                                <br>
-                                                <a href="updateProduct.php?id=<?php echo $srow['id']; ?>" class="btn btn-primary mt-2">Update</a>
-                                                <br>
-
-                                            </td>
-
-                                        </tr>
-
-                                    <?php
-                                    }
-                                    ?>
+                            
+                                <tbody id="loadProducts">
+                                    
                                 </tbody>
                             </table>
 
 
                         </div>
 
-                        <!-- pagination -->
-                        <div class="col-12">
-                            <div class="row d-flex justify-content-center">
-                                <div class="col-12 text-center fs-5 fw-bold mt-2">
-                                    <div>
-                                        <?php
-
-                                        if ($pageno != 1) {
-                                        ?>
-                                            <a href="<?php echo "?page=" .  ($pageno - 1); ?>" class="ms-1 btn btn-outline-dark">&laquo;</a>
-                                        <?php
-                                        }
-
-                                        ?>
-
-                                        <?php
-                                        for ($page = 1; $page <= $number_of_pages; $page++) {
-                                            if ($page == $pageno) {
-
-                                        ?>
-                                                <a href="<?php echo "?page=" . ($page); ?>" class="ms-1 btn btn-outline-dark active"><?php echo $page; ?></a>
-
-                                            <?php
-
-                                            } else {
-
-                                            ?>
-
-                                                <a href="<?php echo "?page=" . ($page); ?>" class="ms-1 btn btn-outline-dark"><?php echo $page; ?></a>
-
-                                        <?php
-
-                                            }
-                                        }
-                                        ?>
-                                        <?php
-
-                                        if ($pageno != $number_of_pages) {
-                                        ?><a href="<?php echo "?page=" . ($pageno + 1); ?>" class="ms-1 btn btn-outline-dark">&raquo;</a>
-                                        <?php
-                                        }
-                                        ?>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- pagination -->
+                        
 
                     </div>
 

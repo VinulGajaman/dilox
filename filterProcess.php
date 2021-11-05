@@ -58,7 +58,6 @@ for ($x = 0; $x < $spn; $x++) {
         <div class="inner" style="height:400px;">
             <img src="<?php echo $imgd["code"]; ?>" class="card-img-top" alt="..." style="object-fit:cover; height: 400px">
         </div>
-        <div class="label1 badge bg-danger">New</div>
         <div class="card-body">
             <h5 class="card-title fw-bold" style="font-size: 18px;"><?php echo $prod["title"]; ?></h5>
         </div>
@@ -96,7 +95,7 @@ for ($x = 0; $x < $spn; $x++) {
                                             }
                 ?>
             </li>
-            <li class="list-group-item text-danger fw-bold">Rs. <?php echo $prod["price"]; ?> .00</li>
+            <li class="list-group-item text-danger fw-bold">Rs. <?php echo $prod["price"]; ?> .00 /=</li>
         </ul>
         <div class="card-body">
             <a href="singleProductView.php?id=<?php echo $prod["id"]; ?>"class="btn btn-outline-warning text-dark"><i class="bi bi-arrows-fullscreen"></i></a>
