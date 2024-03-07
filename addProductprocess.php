@@ -23,7 +23,7 @@ if (isset($_SESSION["a"])) {
     $date = $d->format("Y-m-d H:i:s");
 
     $status = 1;
-    $delivery = 400;
+
 
 
     if (!empty($category) && !empty($title) && !empty($size) && !empty($color) && !empty($qty) && !empty($cost) && !empty($delivery) && !empty($description) && !empty($imgs)) {
@@ -84,7 +84,7 @@ if (isset($_SESSION["a"])) {
 
         for ($i = 0; $i <= sizeof($size); $i++) {
 
-
+            //2D Array
             Database::iud("INSERT INTO `types`(`product_id`,`color`,`qty`,`size`) VALUES ('" . $last_id . "','" . $color[0][$i] . "','" . $qty[0][$i] . "','" . $size[0][$i] . "')");
         }
 
@@ -94,7 +94,6 @@ if (isset($_SESSION["a"])) {
     } else {
         header('location:addProduct.php?inserted=false');
     }
-}else {
+} else {
     header('location:adminSignin.php?login=false');
 }
-

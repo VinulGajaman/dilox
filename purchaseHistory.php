@@ -74,7 +74,14 @@ if (isset($_SESSION["u"])) {
                                             <div class="row g-0">
                                                 <div class="col-md-3 d-block d-lg-none">
                                                     <div class="card-body">
-                                                        <a class="d-flex text-end float-end mb-2" onclick="addDelete('<?php echo $inId['product_id']; ?>');"> <i class="bi bi-x-lg text-dark"></i></a>
+                                                        <?php
+                                                        if ($ind["delivery"] == "1") {
+                                                        ?>
+                                                            <a class="d-flex text-end float-end mb-2" onclick="addDelete('<?php echo $inId['product_id']; ?>');"> <i class="bi bi-x-lg text-dark"></i></a>
+                                                        <?php
+                                                        }
+                                                        ?>
+
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -99,12 +106,34 @@ if (isset($_SESSION["u"])) {
                                                         <span class="card-text text-end"><small class="text-muted"><?php echo $ind["date"]; ?></small></span>
                                                         <br>
                                                         <a href="invoice.php?id=<?php echo $ind["order_id"]; ?>" class="fw-bold text-decoration-underline">See Invoice >>></a>
+
+                                                        <?php
+                                                        if ($ind["delivery"] == "1") {
+                                                        ?>
+                                                            <a class="float-end text-danger">Delivered</a>
+                                                        <?php
+                                                        } else {
+                                                        ?>
+                                                            <a class="float-end text-success">Pending...</a>
+                                                        <?php
+                                                        }
+                                                        ?>
+
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 d-lg-block d-none">
                                                     <div class="card-body">
-                                                        <a class="d-flex text-end float-end mb-2" onclick="addDelete('<?php echo $inId['product_id']; ?>');"><i class="bi bi-x-lg text-dark"></i></a>
+                                                        <?php
+                                                        if ($ind["delivery"] == "1") {
+                                                        ?>
+                                                            <a class="d-flex text-end float-end mb-2" onclick="addDelete('<?php echo $inId['product_id']; ?>');"><i class="bi bi-x-lg text-dark"></i></a>
+                                                        <?php
+                                                        }
+                                                        ?>
+
+
                                                     </div>
+                                                    
                                                     <div class="card-body button1 position-absolute bottom-0 end-0" onclick="addFeedback(<?php echo $prodrs['id']; ?>);">
                                                         <a class="text-dark fs-5 p-2"><i class="bi bi-info-square"></i> Feedback </a>
                                                     </div>
@@ -128,8 +157,18 @@ if (isset($_SESSION["u"])) {
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
+                                                    <p class="text-danger" id="msg<?php echo $prodrs["id"]; ?>"></p>
                                                     <textarea id="feedtxt<?php echo $prodrs["id"]; ?>" cols="30" rows="10" class="form-control fs-5"></textarea>
                                                 </div>
+                                                <div class="col-12 mt-2">
+                                                    <label class="form-label fs-5">Ratings :</label>
+                                                    <i class="bi bi-star-fill fs-5" id="r1" onclick="rate(1);"></i>
+                                                    <i class="bi bi-star-fill fs-5" id="r2" onclick="rate(2);"></i>
+                                                    <i class="bi bi-star-fill fs-5" id="r3" onclick="rate(3);"></i>
+                                                    <i class="bi bi-star-fill fs-5" id="r4" onclick="rate(4);"></i>
+                                                    <i class="bi bi-star-fill fs-5" id="r5" onclick="rate(5);"></i>
+                                                </div>
+                                                <input type="hidden" id="rate" />
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                     <button type="button" class="btn btn-primary" onclick="saveFeedback('<?php echo $prodrs['id']; ?>');">Save Feedback</button>

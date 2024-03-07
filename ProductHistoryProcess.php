@@ -36,17 +36,30 @@ if ($invoiceNum > 0) {
 
 ?>
         <tr>
+
             <td class="d-lg-table-cell d-none"><?php echo $invoicers["order_id"]; ?></td>
-            
-            <td><?php echo $invoicers["id"]; ?></td>
+            <td>
+                <?php
+                $invoiceItem = Database::search("SELECT * FROM `invoice_item` WHERE `invoice_id`='" . $invoicers["id"] . "';");
+                while ($initem = $invoiceItem->fetch_assoc()) {
+                    $pro = Database::search("SELECT * FROM `product` WHERE `id`='" . $initem["product_id"] . "';");
+                    $proData = $pro->fetch_assoc();
+                ?>
+                    <p><?php echo $proData["title"]; ?></p>
+
+                <?php
+                }
+                ?>
+            </td>
             <?php
+
             $user = Database::search("SELECT * FROM `user` WHERE `email`='" . $invoicers["user_email"] . "';");
             $userdata = $user->fetch_assoc();
             ?>
             <td><?php echo $userdata["fname"] . " " . $userdata["lname"]; ?></td>
-           
+
             <?php
-           
+
 
             if ($invoicers["delivery"] == "1") {
             ?>
@@ -62,7 +75,7 @@ if ($invoiceNum > 0) {
 
         </tr>
 
-        
+
 
     <?php
 

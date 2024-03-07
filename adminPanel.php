@@ -13,7 +13,7 @@ require "connection.php";
 
 <head>
 
-    <title>Dilox | Add Products</title>
+    <title>Dilox | Admin Panel</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -184,47 +184,48 @@ if (isset($_SESSION["a"])) {
                                                         ?>
                                                         <h4 class="text-warning fw-bold">MOST SOLD ITEM <i class="bi bi-star-fill"></i></h4>
                                                         <h5 class="card-title"><?php echo $prodrs["title"]; ?></h5>
-                                                        <p class="card-text text-danger fw-bold">Rs.<?php echo $prodrs["price"];?> .00/=</p>
+                                                        <p class="card-text text-danger fw-bold">Rs.<?php echo $prodrs["price"]; ?> .00/=</p>
                                                         <p class="card-text position-absolute bottom-0 end-0"><small class="text-muted"><?php echo $prodrs["datetime_added"]; ?></small></p>
                                                     </div>
                                                 </div>
-                                            <?php
-                                        }
-                                            ?>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-11">
-                                        <hr>
-                                    </div>
-                                    <div class="offset-lg-1 col-lg-11 col-11 mt-3 text-center">
-                                        <h3 class="text-dark fw-bold">PRODUCTS SELLING HISTORY</h3>
-                                    </div>
+                                <?php
+                                }
+                                ?>
 
-                                    <div class="offset-lg-1 col-lg-5 col-5 mt-3 text-center mb-3">
-                                        <label class="form-label fw-bold">From Date</label>
-                                        <input type="datetime-local" class="form-control" id="from" onchange="history(1);" max="<?php echo date("Y-m-d")."T".date("H:i"); ?>"/>
-                                    </div>
-                                    <div class="offset-lg-1 col-lg-5 col-5 mt-3 text-center mb-3">
-                                        <label class="form-label fw-bold">To Date</label>
-                                        <input type="datetime-local" class="form-control" id="to" onchange="history(1);"  max="<?php echo date("Y-m-d")."T".date("H:i"); ?>" />
-                                    </div>
-                                    <div class="offset-lg-1 col-lg-11 col-12 mt-3 mb-3">
-                                        <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th class="d-lg-table-cell d-none">Order Id</th>
-                                                    <th>Invoice Id</th>
-                                                    <th>Buyer</th>
-                                                    <th>Total</th>
-                                                
-                                                </tr>
-                                            </thead>
-                                            <tbody id="historyLoad">
-                                                
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                <div class="col-11">
+                                    <hr>
+                                </div>
+                                <div class="offset-lg-1 col-lg-11 col-11 mt-3 text-center">
+                                    <h3 class="text-dark fw-bold">PRODUCTS SELLING HISTORY</h3>
+                                </div>
+
+                                <div class="offset-lg-1 col-lg-5 col-5 mt-3 text-center mb-3">
+                                    <label class="form-label fw-bold">From Date</label>
+                                    <input type="datetime-local" class="form-control" id="from" onchange="history(1);" max="<?php echo date("Y-m-d") . "T" . date("H:i"); ?>" />
+                                </div>
+                                <div class="offset-lg-1 col-lg-5 col-5 mt-3 text-center mb-3">
+                                    <label class="form-label fw-bold">To Date</label>
+                                    <input type="datetime-local" class="form-control" id="to" onchange="history(1);" max="<?php echo date("Y-m-d") . "T" . date("H:i"); ?>" />
+                                </div>
+                                <div class="offset-lg-1 col-lg-11 col-12 mt-3 mb-3">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="d-lg-table-cell d-none">Order Id</th>
+                                                <th>Product</th>
+                                                <th>Buyer</th>
+                                                <th>Total</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="historyLoad">
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

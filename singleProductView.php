@@ -134,6 +134,22 @@ require "connection.php";
                             </div>
 
                             <div class="col-12 mt-2">
+                                <label class="form-label fs-5">Ratings :</label>
+                                <i class="bi bi-star-fill fs-5 text-warning"></i>
+                                <?php
+                                $rate = Database::search("SELECT * FROM `feedback` WHERE `product_id`='" . $pd["id"] . "';");
+                                $ratenum = $rate->num_rows;
+                                if ($ratenum == 0) {
+                                    $ratenum = 1;
+                                }
+                                $r = 0;
+                                while ($ratedata = $rate->fetch_assoc()) {
+                                    $r += $ratedata["rate"];
+                                }
+                                ?>
+                                <label class="fw-bold"><?php echo round($r / $ratenum, 1); ?></label>
+                            </div>
+                            <div class="col-12 mt-2">
                                 <label class="form-label text-secondary fs-6">COLOURS :</label>
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                     <?php
@@ -190,7 +206,7 @@ require "connection.php";
                                     <?php
                                     } else {
                                     ?>
-                                        <button class="button1 fw-bold" onclick="model();">Add to Cart</button>
+                                        <button class="btn btn-outline-warning fw-bold" onclick="model();" disabled>Add to Cart</button>
                                     <?php
                                     }
                                     ?>
@@ -221,13 +237,13 @@ require "connection.php";
                                 </div>
                             </div>
                         </form>
-                         <!--//////////////////////////// from/////////////////////////// -->
+                        <!--//////////////////////////// from/////////////////////////// -->
                     </div>
                 </div>
                 <hr class="border border-warning border-3 mt-0">
                 <div class="offset-lg-1 col-lg-10 col-12 p-3">
                     <label class="form-label fw-bold fs-5 text-dark">Product Details :</label>
-                    <textarea class="form-control fs-5" cols="100" rows="10" name="desc" required><?php echo $pd["description"]; ?></textarea>
+                    <textarea class="form-control fs-5" cols="100" rows="10" name="desc" required readonly><?php echo $pd["description"]; ?></textarea>
                 </div>
                 <!-- realted items -->
                 <div class="offset-lg-10 col-lg-2 col-12 mt-3 mb-3">
@@ -337,9 +353,9 @@ require "connection.php";
                             for ($a = 0; $a < $feed; $a++) {
                                 $feedrow = $feedbackrs->fetch_assoc();
                             ?>
-                                <div class="col-12 col-lg-3 border border-1 border-secondary rounded">
+                                <div class="col-12 border border-1 border-secondary rounded">
                                     <div class="row">
-                                        <div class="col-3">
+                                        <div class="col-3 col-lg-1">
                                             <?php
 
                                             $profileImg = Database::search("SELECT * FROM `profile_img` WHERE `user_email`='" . $_SESSION["u"]["email"] . "' ;");
@@ -367,11 +383,25 @@ require "connection.php";
 
                                             ?>
                                         </div>
-                                        <div class="col-7">
+                                        <div class="col-9">
                                             <span class="fw-bold text-secondary"><?php echo $userData["fname"] . " " . $userData["lname"]; ?></span>
                                             <br />
                                             <p class=" fs-5 text-dark fw-bold"><?php echo $feedrow["feed"]; ?></p>
-
+                                            <p><label class="form-label fs-5">Ratings :</label>
+                                                <?php
+                                                for ($i = 0; $i < $feedrow["rate"]; $i++) {
+                                                ?>
+                                                    <i class="bi bi-star-fill fs-5 text-warning"></i>
+                                                <?php
+                                                }
+                                                for($x=$feedrow["rate"];$x<5;$x++){
+                                                    ?>
+                                                    <i class="bi bi-star-fill fs-5"></i>
+                                                <?php
+                                                }
+                                                ?>
+                                               
+                                            </p>
                                         </div>
                                         <div class="col-12 text-end">
                                             <span class="text-black-50"><?php echo $feedrow["date"]; ?></span>

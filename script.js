@@ -875,7 +875,7 @@ function payNow() {
 
     };
 
-    r.open("GET", "buyNowProcess.php?id=1", true);
+    r.open("GET", "buyNowProcess.php", true);
     r.send();
 }
 
@@ -932,10 +932,13 @@ function saveFeedback(id) {
 
     var pid = id;
     var feedtxt = document.getElementById("feedtxt" + pid).value;
+    var r = document.getElementById("rate").value;
     var f = new FormData();
+
 
     f.append("i", pid);
     f.append("ft", feedtxt);
+    f.append("r", r);
 
     var r = new XMLHttpRequest();
 
@@ -947,7 +950,9 @@ function saveFeedback(id) {
 
             if (text == "1") {
                 k.hide();
-                window.location = "purchaseHistory.php";
+
+            } else {
+                document.getElementById("msg" + pid).innerHTML = text;
             }
         }
 
@@ -1156,4 +1161,20 @@ function saveCategory() {
 
     r.open("GET", "addNewCategoryProcess.php?t=" + txt, true);
     r.send();
+}
+
+function rate(x) {
+
+    for (var i = 1; i <= 5; i++) {
+        var r = document.getElementById("r" + i);
+        r.className = "bi bi-star-fill fs-5";
+    }
+
+    for (var i = 1; i <= x; i++) {
+        var r = document.getElementById("r" + i);
+        r.className = "bi bi-star-fill fs-5 text-warning";
+    }
+
+    document.getElementById("rate").value = x;
+
 }

@@ -60,7 +60,7 @@ if (!isset($_GET["c"])) {
             <div class="col-12 mb-4">
                 <div class="row">
                     <div class="col-lg-6 col-12">
-                        <select class="col-6 form-control fw-bold" id="filter" onchange="filter(value,<?php echo $id; ?>,1);">
+                        <select class="col-6 btn border border-secondary fw-bold" id="filter" onchange="filter(value,<?php echo $id; ?>,1);" >
                             <option class="fw-bold" value="0">Filters</option>
                             <option class="fw-bold" value="1">Sort by Latest</option>
                             <option class="fw-bold" value="2">Sort by price: Low to High</option>

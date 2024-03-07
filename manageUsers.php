@@ -109,7 +109,7 @@ if (isset($_SESSION["a"])) {
                                             <?php
                                             $profileimg = Database::search("SELECT * FROM `profile_img` WHERE `user_email`='" . $srow["email"] . "' ");
                                             $pnum = $profileimg->num_rows;
-                                            if ($pnum = 1) {
+                                            if ($pnum == 1) {
                                                 $pcode = $profileimg->fetch_assoc();
                                             ?>
                                                 <td class="d-lg-table-cell d-none"><img src="<?php echo $pcode["code"]; ?>" style="height: 100px;"></td>
